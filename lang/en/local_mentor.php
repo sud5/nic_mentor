@@ -1,0 +1,43 @@
+<?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Language file for mentor
+ *
+ * @package    local_mentor
+ * @copyright  2pisolutions.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+$string['pluginname'] = "Mentor";
+$string['nothingtodisplay'] = "Nothing to display";
+$string['fullname'] = "Fullname";
+$string['noofparticipantscount'] = 'No of Mentor: {$a}';
+$string['gender'] = 'Gender';
+$string['dob'] = 'Date of birth';
+$string['state'] = 'State';
+$string['city'] = 'City';
+$string['alreadyrequested'] = 'This email already requested for mentor account.Please try with new email.';
+$string['linkedin'] = 'LinkedIn Id url';
+$string['fburl'] = 'Facebook Id url';
+$string['institute'] = 'Institute';
+$string['requestmessage'] = 'Your mentor account request successfully send.Please wait for the response.';
+$string['dob'] = 'Date of birth';
+$string['status'] = 'Status';
+$string['action'] = 'Action';
+$string['noofmentor'] = 'No of Mentors';
+$string['last_active'] = 'Last Active';
+$string['never'] = 'Never';
+//$string['dob'] = 'Date of birth';
