@@ -161,4 +161,58 @@ public static function get_inactive_mentor_parameters() {
         ]);
     }
 
+    public static function get_mentor_sessions_parameters() {
+        return new external_function_parameters(
+                array(
+                   'page' => new external_value(PARAM_INT, 'page'),
+                   'email' => new external_value(PARAM_RAW, 'email'),
+
+                )
+        );
+    }
+
+    public static function get_mentor_sessions($page, $email) {
+        global $DB, $CFG, $PAGE;
+        $params = self::validate_parameters(self::get_mentor_sessions_parameters(), array('page' => $page, 'email' => $email));
+        $context = context_system::instance();
+        $PAGE->set_context($context);
+        $where = '';
+//        if(!empty($params['pfnumber'])){
+//            $pfnumber = $params['pfnumber'];
+//            $where .= " AND u.idnumber LIKE '%".$pfnumber."%'";
+//        }
+        if(!empty($params['email'])){
+            $email = $params['email'];
+//            $where .= " AND CONCAT(u.firstname,' ',u.lastname)  LIKE  '%".$fullname."%'";
+            $where .= " AND mu.email LIKE  '%".$email."%'";
+        }
+        $perpage= 20;
+        $mentorparams = array();
+        $countfields = 'SELECT COUNT(u.id)';
+        $fields = "SELECT msr.*, s.name as state, mu.id as mentorid,mu.email,mu.city, mu.firstname,mu.lastname, CONCAT(mu.firstname,' ',mu.lastname) as mentorname,ms.name as schoolname,ms.id as schoolid,ms.atl_id as schoolatlid";
+        $sql = " FROM `mdl_mentor_sessionrpt` msr join mdl_user mu on mu.id=msr.mentorid join mdl_school ms on msr.schoolid=ms.id left join mdl_state s on s.id=mu.aim WHERE mu.deleted=0 $where";
+//        $totalmentors = $DB->count_records_sql($countfields . $sql, $mentorparams);
+//       echo $fields . $sql;die;
+                
+        $availablementors = $DB->get_records_sql($fields . $sql, $mentorparams, ($page * $perpage), $perpage);
+        $totalavailablementors = $DB->get_records_sql($fields . $sql, $mentorparams);
+       
+        $renderer = $PAGE->get_renderer('local_mentor');
+        $out = "";
+        $out .= $renderer->mentor_session_report_display($availablementors, count($totalavailablementors), $page, $perpage);
+        $html = array();
+        $html['html'] = $out;
+        return $html;
+    }
+
+    /**
+     * Returns description of method result value
+     *
+     * @return external_description
+     */
+    public static function get_mentor_sessions_returns() {
+        return $data = new external_single_structure([
+            'html' => new external_value(PARAM_RAW, 'html')
+        ]);
+    }
 }

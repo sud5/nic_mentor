@@ -30,7 +30,7 @@ switch ($action) {
         if (strtolower($status) == "deny") {
             $mentor->status = DENY;
             $DB->update_record('mentor_request', $mentor);
-            echo "Deny";
+            echo "Denied";
         } else if (strtolower($status) == "allow") {
              $id  = create_mentor($mentor);
              if($id){

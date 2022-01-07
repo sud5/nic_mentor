@@ -53,7 +53,7 @@ class mentor_signup_form extends moodleform {
         
         $mform->addElement('hidden', 'cityid', 0, array('id' => "cityid"));
         $mform->setType('cityid', PARAM_INT);
-        $this->add_action_buttons(true);
+        $this->add_action_buttons(true, get_string('submit'));
 //        $mform->setType('email', PARAM_TEXT);
 //        $this->set_data($data);
         $mform->disable_form_change_checker();

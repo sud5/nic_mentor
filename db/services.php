@@ -24,4 +24,13 @@ $functions = array(
         'type' => 'read',
         'capabilities' => 'local/mentor:approve_request',
     ),
+     'local_mentor_session_report' => array(
+        'classname' => 'local_mentor_external',
+        'methodname' => 'get_mentor_sessions',
+        'classpath' => 'local/mentor/externallib.php',
+        'description' => 'Get the list of potential users which are inactive',
+        'ajax' => true,
+        'type' => 'read',
+        'capabilities' => 'local/mentor:approve_request',
+    ),
 );

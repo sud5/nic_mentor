@@ -26,7 +26,7 @@ echo $renderer->mentor_session_filter();
 echo html_writer::start_div('mentor-session-report');
 echo $renderer->mentor_session_report_display($availablementors, count($allavailablementors), $page, $perpage);
 echo html_writer::end_div();
-$PAGE->requires->js_call_amd('local_mentor/inactivementor', 'setup');
+$PAGE->requires->js_call_amd('local_mentor/mentorsessions', 'setup');
 echo $OUTPUT->footer();
 
 
