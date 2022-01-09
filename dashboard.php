@@ -128,7 +128,7 @@ $inactivementors =count($inactivementors);
                 <p>Inactive Mentors</p>
               </div>
               <div class="icon">                
-				<i class="fa fa-ban"></i>
+				<i class="fa fa-user-times"></i>
               </div>
              
             </div>
@@ -143,7 +143,7 @@ $inactivementors =count($inactivementors);
                                     
      <!-- <div class="col-md-3 col-sm-6 col-xs-12">                       
 <a href="#" class="btn btn-primary form-control"><i class="fa fa-university"></i> School Wise Mentor List</a>
-      </div>-->
+      </div>
       
      <div class="col-md-3 col-sm-6 col-xs-12">                       
 <a href="#" class="btn btn-primary form-control"><i class="fa fa-user"></i>Mentor Wise School List</a>
@@ -155,7 +155,7 @@ $inactivementors =count($inactivementors);
       
     <div class="col-md-3 col-sm-6 col-xs-12">                       
 <a href="#" class="btn btn-primary form-control"><i class="fa fa-database"></i>School Database</a>
-      </div> 
+      </div> -->
       
  </div>
                                 

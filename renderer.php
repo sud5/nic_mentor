@@ -54,12 +54,11 @@ class local_mentor_renderer extends plugin_renderer_base {
         $output = "";
         $output .= html_writer::start_div('form-inline form-group');
         $output .= html_writer::start_div("row");
-        $output .= html_writer::start_div("form-group col-xs-6");
+        $output .= html_writer::start_div("form-group col-xs-3");
         $output .= html_writer::label('email', "useremail", true, array('class' => "sr-only"));
         $output .= html_writer::tag('input', '', array("type" => "text", "class" => "form-control", "placeholder" => "Email", 'id' => "useremail"));
         $output .= html_writer::end_div();
-        $output .= html_writer::start_div("form-group col-xs-6");
-        $states = array('Delhi','Goa');
+        $output .= html_writer::start_div("form-group col-xs-3");
         $sql = "select s.id, s.name as statename from {state} as s";
         $allavailablestates = $DB->get_records_sql($sql);
         $states = array();
@@ -68,11 +67,11 @@ class local_mentor_renderer extends plugin_renderer_base {
         }
         $output .= html_writer::select($states,'select',null,'Select State',array('id' => "state"));
         $output .= html_writer::end_div();
-        $output .= html_writer::start_div("form-group col-xs-6");
+        $output .= html_writer::start_div("form-group col-xs-3");
         $output .= html_writer::label('city', "city", true, array('class' => "sr-only"));
         $output .= html_writer::tag('input', '', array("type" => "text", "class" => "form-control", "placeholder" => "City", 'id' => "city"));
         $output .= html_writer::end_div();
-        $output .= html_writer::start_div("form-group col-xs-6");
+        $output .= html_writer::start_div("form-group col-xs-3");
         $url = new moodle_url("index.php");
         $output .= html_writer::link($url,"Reset Filters",array('class' => 'btn btn-primary'));
         $output .= html_writer::end_div();
@@ -249,11 +248,11 @@ class local_mentor_renderer extends plugin_renderer_base {
         $output = "";
         $output .= html_writer::start_div('form-inline form-group');
         $output .= html_writer::start_div("row");
-        $output .= html_writer::start_div("form-group col-xs-6");
+        $output .= html_writer::start_div("form-group col-xs-3");
         $output .= html_writer::label('email', "useremail", true, array('class' => "sr-only"));
         $output .= html_writer::tag('input', '', array("type" => "text", "class" => "form-control", "placeholder" => "Email", 'id' => "useremail"));
         $output .= html_writer::end_div();
-        $output .= html_writer::start_div("form-group col-xs-6");
+        $output .= html_writer::start_div("form-group col-xs-3");
         $states = array('Delhi','Goa');
         $sql = "select s.id, s.name as statename from {state} as s";
         $allavailablestates = $DB->get_records_sql($sql);
@@ -263,11 +262,11 @@ class local_mentor_renderer extends plugin_renderer_base {
         }
         $output .= html_writer::select($states,'select',null,'Select State',array('id' => "state"));
         $output .= html_writer::end_div();
-        $output .= html_writer::start_div("form-group col-xs-6");
+        $output .= html_writer::start_div("form-group col-xs-3");
         $output .= html_writer::label('city', "city", true, array('class' => "sr-only"));
         $output .= html_writer::tag('input', '', array("type" => "text", "class" => "form-control", "placeholder" => "City", 'id' => "city"));
         $output .= html_writer::end_div();
-        $output .= html_writer::start_div("form-group col-xs-6");
+        $output .= html_writer::start_div("form-group col-xs-3");
         $url = new moodle_url("inactive_mentors.php");
         $output .= html_writer::link($url,"Reset Filters",array('class' => 'btn btn-primary'));
         $output .= html_writer::end_div();
