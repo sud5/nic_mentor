@@ -11,7 +11,7 @@ $PAGE->set_pagelayout('standard');
 $PAGE->set_title('Mentor Sessions');
 $PAGE->set_heading('Mentor Sessions');
 echo $OUTPUT->header();
-
+echo $OUTPUT->heading("Mentor Sessions:");
 
 $params = array();
 $countfields = 'SELECT COUNT(mu.id)';

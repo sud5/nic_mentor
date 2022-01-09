@@ -15,18 +15,11 @@ class local_mentor_renderer extends plugin_renderer_base {
 
     public function mentor_report_display($availablementors, $totalmentors, $page, $perpage) {
         global $DB, $CFG, $OUTPUT;
-//        \core\session\manager::write_close();
         $out = '';
         $out .= html_writer::tag('p', get_string('noofparticipantscount', 'local_mentor', $totalmentors), array('class' => 'text-black text-right mb-2'));
         if ($totalmentors == 0) {
             return html_writer::div(get_string('nothingtodisplay', 'local_mentor'), 'alert alert-info mt-3');
         }
-//        $sql = "select c.id, c.name as cityname, s.name as statename from {city} as c left join {state} as s on c.stateid= s.id";
-//        $allavailablecities = $DB->get_records_sql($sql , $params);
-//        $availablecity_state = array();
-//        foreach($allavailablecities as &$availablecities){
-//            $availablecity_state[$availablecities->cityname] = $availablecities->statename;
-//        }
         $table = new html_table();
         $table->head = array(get_string('fullname', 'local_mentor'), get_string('email'),get_string('gender','local_mentor'), get_string('city'),get_string('state'));
         $table->attributes = array('class' => 'table');
@@ -46,8 +39,6 @@ class local_mentor_renderer extends plugin_renderer_base {
         $url = new moodle_url('/local/mentor/index.php', array('page' => $page));
         $out .= $OUTPUT->paging_bar($totalmentors, $page, $perpage, $url);
         $params = array();
-//        $baseurl = new moodle_url('/local/mentor/download/downloadmentorlist.php', $params);            
-//        $out .= html_writer::tag('div', $this->download_buttons($baseurl), array('class' => 'text-white mt-3 mb-3'));
         return $out;
     }
 
@@ -83,7 +74,7 @@ class local_mentor_renderer extends plugin_renderer_base {
         $output .= html_writer::end_div();
         $output .= html_writer::start_div("form-group col-xs-6");
         $url = new moodle_url("index.php");
-        $output .= html_writer::link($url,"Reset Filters",array('class' => 'btn btn-secondary'));
+        $output .= html_writer::link($url,"Reset Filters",array('class' => 'btn btn-primary'));
         $output .= html_writer::end_div();
         $output .= html_writer::end_div();
         $output .= html_writer::end_div();
@@ -99,12 +90,6 @@ class local_mentor_renderer extends plugin_renderer_base {
         if ($totalmentors == 0) {
             return html_writer::div(get_string('nothingtodisplay', 'local_mentor'), 'alert alert-info mt-3');
         }
-//        $sql = "select c.id, c.name as cityname, s.name as statename from {city} as c left join {state} as s on c.stateid= s.id";
-//        $allavailablecities = $DB->get_records_sql($sql , $params);
-//        $availablecity_state = array();
-//        foreach($allavailablecities as &$availablecities){
-//            $availablecity_state[$availablecities->cityname] = $availablecities->statename;
-//        }
         $table = new html_table();
         $table->head = array(get_string('fullname', 'local_mentor'), get_string('email'),get_string('last_active','local_mentor'),get_string('city'),get_string('state'));
         $table->attributes = array('class' => 'table');
@@ -124,8 +109,6 @@ class local_mentor_renderer extends plugin_renderer_base {
         $url = new moodle_url('/local/mentor/inactive_mentors.php', array('page' => $page));
         $out .= $OUTPUT->paging_bar($totalmentors, $page, $perpage, $url);
         $params = array();
-//        $baseurl = new moodle_url('/local/mentor/download/downloadmentorlist.php', $params);            
-//        $out .= html_writer::tag('div', $this->download_buttons($baseurl), array('class' => 'text-white mt-3 mb-3'));
         return $out;
     }
     
@@ -163,7 +146,7 @@ class local_mentor_renderer extends plugin_renderer_base {
         $out .= html_writer::start_tag('div', array('class' => 'db-program-progress no-overflow p-3'));
         $out .= html_writer::table($table);
         $out .= html_writer::end_tag('div');
-        $url = new moodle_url('/local/mentor/index.php', array('page' => $page));
+        $url = new moodle_url('/local/mentor/request.php', array('page' => $page));
         $out .= $OUTPUT->paging_bar($totalmentors, $page, $perpage, $url);
         return $out;
     }
@@ -205,7 +188,7 @@ class local_mentor_renderer extends plugin_renderer_base {
         $out .= html_writer::start_tag('div', array('class' => 'db-program-progress no-overflow p-3'));
         $out .= html_writer::table($table);
         $out .= html_writer::end_tag('div');
-        $url = new moodle_url('/local/mentor/index.php', array('page' => $page));
+        $url = new moodle_url('/local/mentor/schools.php', array('page' => $page));
         $out .= $OUTPUT->paging_bar($totalschools, $page, $perpage, $url);
         $baseurl = new moodle_url('/local/mentor/download/download_schoolinfo.php', $allparams);
         $out .= html_writer::tag('div', $this->download_buttons($baseurl), array('class' => 'text-white mt-3 mb-3'));
@@ -244,7 +227,11 @@ class local_mentor_renderer extends plugin_renderer_base {
         $output .= html_writer::start_div("row");
         $output .= html_writer::start_div("form-group col-xs-6");
         $output .= html_writer::label('schoolname', "schoolnames", true, array('class' => "sr-only"));
-        $output .= html_writer::tag('input', '', array("type" => "text", "class" => "form-control", "placeholder" => "School name", 'id' => "schoolnames"));
+        $output .= html_writer::tag('input', '', array("type" => "text", "class" => "form-control", "placeholder" => "School Name", 'id' => "schoolnames"));
+        $output .= html_writer::end_div();
+        $output .= html_writer::start_div("form-group col-xs-6");
+        $url = new moodle_url("schools.php");
+        $output .= html_writer::link($url,"Reset Filters",array('class' => 'btn btn-primary'));
         $output .= html_writer::end_div();
         $output .= html_writer::end_div();
         $output .= html_writer::end_div();
@@ -282,13 +269,11 @@ class local_mentor_renderer extends plugin_renderer_base {
         $output .= html_writer::end_div();
         $output .= html_writer::start_div("form-group col-xs-6");
         $url = new moodle_url("inactive_mentors.php");
-        $output .= html_writer::link($url,"Reset Filters",array('class' => 'btn btn-secondary'));
+        $output .= html_writer::link($url,"Reset Filters",array('class' => 'btn btn-primary'));
         $output .= html_writer::end_div();
         $output .= html_writer::end_div();
         $output .= html_writer::end_div();
         echo $output;
-                $url = "Sdfs/sfs";
-        $output .= html_writer::link($url,"Reset Filters",array('class' => 'btn btn-secondary'));
     }
     
 public function mentor_session_report_display($availablementors, $totalmentors, $page, $perpage) {
@@ -348,13 +333,11 @@ public function mentor_session_report_display($availablementors, $totalmentors, 
         $output .= html_writer::end_div();
         $output .= html_writer::start_div("form-group col-xs-6");
         $url = new moodle_url("mentor_sessions.php");
-        $output .= html_writer::link($url,"Reset Filters",array('class' => 'btn btn-secondary'));
+        $output .= html_writer::link($url,"Reset Filters",array('class' => 'btn btn-primary'));
         $output .= html_writer::end_div();
         $output .= html_writer::end_div();
         $output .= html_writer::end_div();
         echo $output;
-                $url = "Sdfs/sfs";
-        $output .= html_writer::link($url,"Reset Filters",array('class' => 'btn btn-secondary'));
     }
     
         public function download_buttons($baseurl) {

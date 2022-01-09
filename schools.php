@@ -7,6 +7,7 @@ global $DB;
 $context = context_system::instance();
 $PAGE->set_context($context);
 $PAGE->set_url('/local/mentor/schools.php');
+$PAGE->set_pagelayout('standard');
 $PAGE->set_title('Schools');
 
 $params = array();
