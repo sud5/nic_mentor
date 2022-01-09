@@ -53,5 +53,18 @@ switch ($action) {
         echo $renderer->mentor_request_display($allavailablementors, $availablementors, $page, $perpage);
 
         break;
+        case "displaymentor":
+      
+        $page = required_param('page', PARAM_INT);
+        $perpage = optional_param('perpage', 20, PARAM_INT);
+        $params = array();
+
+        $availablementors = $DB->count_records("mentor_request");
+        $allavailablementors = $DB->get_records("mentor_request", $params, "timecreated DESC", '*', ($page * $perpage), $perpage);
+
+        $renderer = $PAGE->get_renderer('local_mentor');
+        echo $renderer->mentor_request_display($allavailablementors, $availablementors, $page, $perpage);
+
+        break;
     default:
 }

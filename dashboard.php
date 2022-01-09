@@ -35,12 +35,38 @@ $PAGE->set_pagelayout('standard');
 $strmessages = "Dashboard";
 $PAGE->set_title("{$SITE->shortname}: $strmessages");
 $PAGE->set_heading("Dashboard");
+$schoolurl = new moodle_url('/local/mentor/schools.php');
 $mentorlisturl = new moodle_url('/local/mentor/index.php');
-echo $OUTPUT->header();
-?>
-<!-- Add html content Here -->
+$mentors_sessions_url = new moodle_url('/local/mentor/mentor_sessions.php');
+$inactive_mentors_url = new moodle_url('/local/mentor/inactive_mentors.php');
 
-  <h2>RMOC Dashboard</h2>
+echo $OUTPUT->header();
+
+$fields = "SELECT ms.*,mus.userid,mus.schoolid,mu.firstname,mu.lastname ";
+$sql = " FROM {school} ms 
+         LEFT JOIN (SELECT * from {user_school} WHERE role='incharge') mus on mus.schoolid=ms.id 
+         LEFT JOIN {user} mu on mu.id=mus.userid WHERE ms.activestatus=1 and mu.deleted=0";
+$allschools = $DB->get_records_sql($fields . $sql);
+$allschools = count($allschools);
+$sql = "SELECT u.id,ud.scormstatus, s.name as state, count(CASE WHEN me.userid = u.id THEN 1 END) as meetingcount,count(CASE WHEN (me.meetingstatus = 1 AND me.parentid=u.id) THEN 1 END) as approved,count(CASE WHEN (me.meetingstatus=2 AND me.parentid=u.id) THEN 1 END) as rejected,count(CASE WHEN (me.meetingstatus=3 AND me.parentid=u.id) THEN 1 END) as completed "
+    . "FROM {user} u "
+        . " left join {user_info_data} ud on ud.userid=u.id left join mdl_state s on s.id=u.aim left join (select * from {event} where eventtype='user' and parentid!=0 ) me on (u.id=me.userid or u.id=me.parentid) "
+        . "WHERE msn=4 and deleted=0 and ud.data='mentor data' group by u.id order by u.id ASC";
+$allavailablementors = $DB->get_records_sql($sql);
+$mentor_count =count($allavailablementors);
+$fields = "SELECT msr.*, s.name as state, mu.id as mentorid,mu.email,mu.city, mu.firstname,mu.lastname, CONCAT(mu.firstname,' ',mu.lastname) as mentorname,ms.name as schoolname,ms.id as schoolid,ms.atl_id as schoolatlid";
+$sql = " FROM `mdl_mentor_sessionrpt` msr join mdl_user mu on mu.id=msr.mentorid join mdl_school ms on msr.schoolid=ms.id left join mdl_state s on s.id=mu.aim WHERE mu.deleted=0";
+$mentor_sessions = $DB->get_records_sql($fields . $sql);
+$mentor_sessions_count =count($mentor_sessions);
+$duration = 90*24*60*60;
+$time = time()- $duration;
+$fields = "SELECT u.*,ud.scormstatus, s.name as state, count(CASE WHEN me.userid = u.id THEN 1 END) as meetingcount,count(CASE WHEN (me.meetingstatus = 1 AND me.parentid=u.id) THEN 1 END) as approved,count(CASE WHEN (me.meetingstatus=2 AND me.parentid=u.id) THEN 1 END) as rejected,count(CASE WHEN (me.meetingstatus=3 AND me.parentid=u.id) THEN 1 END) as completed ";
+$sql = " FROM {user} u "
+        . " left join {user_info_data} ud on ud.userid=u.id left join mdl_state s on s.id=u.aim left join (select * from {event} where eventtype='user' and parentid!=0 ) me on (u.id=me.userid or u.id=me.parentid) "
+        . "WHERE msn=4 and deleted=0 and ud.data='mentor data' and u.lastaccess < $time group by u.id order by u.id ASC";
+$inactivementors = $DB->get_records_sql($fields . $sql);
+$inactivementors =count($inactivementors);
+?>
                                 
   <div class="row reportdetails">
                                   
@@ -48,9 +74,9 @@ echo $OUTPUT->header();
                  <a href=<?php echo "$mentorlisturl";?>> 
             <div class="small-box bg-primary">
               <div class="inner">
-                <h4>15</h4>
+                <h4><?php echo "$mentor_count";?></h4>
 
-                <p> Mentor's</p>
+                <p> Mentors</p>
               </div>
               <div class="icon">                
 				<i class="fa fa-users"></i>
@@ -62,11 +88,12 @@ echo $OUTPUT->header();
  
                            
            <div class="col-md-3 col-sm-3 col-xs-6">
+               <a href=<?php echo "$schoolurl";?>> 
             <div class="small-box bg-success">
               <div class="inner">
-                <h4><strong>10</strong></h4>
+                <h4><?php echo "$allschools";?></h4>
 
-                <p>Schools</p>
+                <p>Mentors/School</p>
               </div>
               <div class="icon">                
 				<i class="fa fa-university"></i>
@@ -77,11 +104,12 @@ echo $OUTPUT->header();
                                     
                                              
          <div class="col-md-3 col-sm-3 col-xs-6">
+             <a href=<?php echo "$mentors_sessions_url";?>> 
             <div class="small-box bg-danger">
               <div class="inner">
-                <h4><strong>50</strong></h4>
+                <h4><?php echo "$mentor_sessions_count";?></h4>
 
-                <p>Sessions</p>
+                <p>Mentors Sessions</p>
               </div>
               <div class="icon">                
 				<i class="fa fa-comments"></i>
@@ -92,14 +120,15 @@ echo $OUTPUT->header();
                                     
                                     
         <div class="col-md-3 col-sm-3 col-xs-6">
+            <a href=<?php echo "$inactive_mentors_url";?>> 
             <div class="small-box bg-success">
               <div class="inner">
-                <h4><strong>7</strong></h4>
+                <h4><?php echo "$inactivementors";?></h4>
 
-                <p>Events</p>
+                <p>Inactive Mentors</p>
               </div>
               <div class="icon">                
-				<i class="fa fa-calendar"></i>
+				<i class="fa fa-ban"></i>
               </div>
              
             </div>
@@ -112,20 +141,20 @@ echo $OUTPUT->header();
         
   <div class="row">
                                     
-      <div class="col-md-3 col-sm-6 col-xs-12">                       
-<a href="#" class="btn btn-primary form-control"><i class="fa fa-user"></i> Mentor Leader Board</a>
-      </div>
+     <!-- <div class="col-md-3 col-sm-6 col-xs-12">                       
+<a href="#" class="btn btn-primary form-control"><i class="fa fa-university"></i> School Wise Mentor List</a>
+      </div>-->
       
      <div class="col-md-3 col-sm-6 col-xs-12">                       
-<a href="#" class="btn btn-primary form-control"><i class="fa fa-university"></i> School Leader Board</a>
+<a href="#" class="btn btn-primary form-control"><i class="fa fa-user"></i>Mentor Wise School List</a>
       </div> 
       
 <div class="col-md-3 col-sm-6 col-xs-12">                       
-<a href="#" class="btn btn-primary form-control"><i class="fa fa-envelope"></i> Inbox</a>
+<a href="#" class="btn btn-primary form-control"><i class="fa fa-database"></i>Mentor Database</a>
       </div> 
       
     <div class="col-md-3 col-sm-6 col-xs-12">                       
-<a href="#" class="btn btn-primary form-control"><i class="fa fa-calendar"></i> Add Event</a>
+<a href="#" class="btn btn-primary form-control"><i class="fa fa-database"></i>School Database</a>
       </div> 
       
  </div>
@@ -134,79 +163,6 @@ echo $OUTPUT->header();
    <br>    <br> 
       
 
-                                
-                                
-<!-- slider start-->
-                                
-   <div id="carouselExampleIndicators" class="carousel slide events-slier" data-ride="carousel">
-  <ol class="carousel-indicators">
-    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-  </ol>
-  
-
-       
-     <div class="carousel-inner">
-         <!--item start-->
-    <div class="carousel-item active">
-   <div class="row">
-        <div class="col-md-6 col-sm-12 col-xs-12"> 
-        <img src="http://localhost/atlnew/atlinnonet/rmoc/images/eventslider.jpg" class="d-block" width="100%">
-        </div>
-       
-        <div class="col-md-6 col-sm-12 col-xs-12"> 
-            <div class="events_slider_content">
-       <h3>Learn Data Analysis with Online Data Analysis Courses </h3>
-        <h6>05 July 2020 | 10:00 am</h6>
-       <h5><strong>54</strong> going  |  Type:  <span>Webinar</span></h5>     
-       </div>
-            </div>
-        
-        
-    </div>  
-          </div>
-          <!--item end-->
-         
-         
-         <!--item start-->
-    <div class="carousel-item">
-   <div class="row">
-        <div class="col-md-6 col-sm-12 col-xs-12"> 
-        <img src="http://localhost/atlnew/atlinnonet/rmoc/images/eventslider.jpg" class="d-block" width="100%">
-        </div>
-       
-        <div class="col-md-6 col-sm-12 col-xs-12"> 
-            <div class="events_slider_content">
-       <h3>Learn Data Analysis with Online Data Analysis Courses </h3>
-        <h6>05 July 2020 | 10:00 am</h6>
-       <h5><strong>54</strong> going  |  Type:  <span>Webinar</span></h5>     
-       </div>
-            </div>
-        
-        
-    </div>  
-          </div>
-          <!--item end-->
-         
-         
-        
-       </div>
-       
-       
-       
-  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
-</div>
-                                
-   <!-- slider end-->                             
-  
 <?php
 
 //Prod

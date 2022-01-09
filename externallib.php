@@ -215,4 +215,61 @@ public static function get_inactive_mentor_parameters() {
             'html' => new external_value(PARAM_RAW, 'html')
         ]);
     }
+    
+     /*
+     * State or city filter
+     */
+
+    public static function school_list_parameters() {
+        return new external_function_parameters(
+                array(
+                    'page' => new external_value(PARAM_INT, 'page'),
+                    'name' => new external_value(PARAM_RAW, 'name')
+                )
+        );
+    }
+
+    /*
+     * Function To display select data
+     */
+
+    public static function school_list($page, $name) {
+        global $DB, $PAGE;
+        $params = self::validate_parameters(self::school_list_parameters(), array('page' => $page, 'name' => $name));
+        $out = '';
+        $context = \context_system::instance();
+        $PAGE->set_context($context);
+        $perpage = 20;
+        $attrparams = array();
+        
+        $where = '';
+        if(!empty($name)){
+            $where = " AND ms.name LIKE '%".$name."%'";
+            $attrparams['name'] = $name;
+        }
+        $fields = "SELECT ms.*,mus.userid,mus.schoolid,mu.firstname,mu.lastname ";
+        $sql = " FROM {school} ms 
+                 LEFT JOIN (SELECT * from {user_school} WHERE role='incharge') mus on mus.schoolid=ms.id 
+                 LEFT JOIN {user} mu on mu.id=mus.userid WHERE ms.activestatus=1 and mu.deleted=0 $where";
+        $schools = $DB->get_records_sql($fields . $sql , $attrparams, ($page * $perpage), $perpage);
+        $allschools = $DB->get_records_sql($fields . $sql , $attrparams);
+
+        $renderer = $PAGE->get_renderer('local_mentor');
+        $out = "";
+        $out .= $renderer->school_display($schools, count($allschools), $page, $perpage, $attrparams);
+        $html = array();
+        $html['html'] = $out;
+        return $html;
+    }
+
+    /**
+     * Returns description of method result value
+     *
+     * @return external_description
+     */
+    public static function school_list_returns() {
+        return $data = new external_single_structure([
+            'html' => new external_value(PARAM_RAW, 'html')
+        ]);
+    }
 }

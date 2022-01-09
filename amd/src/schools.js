@@ -10,8 +10,8 @@ define(['jquery', 'jqueryui', 'core/ajax', 'core/str', 'core/form-autocomplete',
             var manager = {
                 setup: function () {
                     $(document).on('click', '.page-link', manager.pagination);
-                    $(document).on('keyup', '#pfnumber, #useremail', manager.text_filter);
-                    $(document).on('change', '#state', manager.state_filter);
+                    $(document).on('keyup', '#schoolnames', delay(manager.text_filter, 1000));
+                    $(document).on('click', '.showmentor', manager.show_mentors);
                 },
                 pagination: function (e) {
                     e.preventDefault();
@@ -23,88 +23,70 @@ define(['jquery', 'jqueryui', 'core/ajax', 'core/str', 'core/form-autocomplete',
                         e.preventDefault();
                     } else {
                         var promise;
-                        var email = $("#useremail").val();
-                        var state = $("#state").val();
-                        var city = $("#city").val();
-                        var email = $("#useremail").val();
+                        var name = $("#schoolnames").val();
                         var WAITICON = {'pix': M.util.image_url("loading", 'local_mentor'), 'component': 'moodle'};
                         var loader = $('<img />')
                                 .attr('src', M.util.image_url(WAITICON.pix, WAITICON.component))
                                 .addClass('spinner');
                         ;
-                        $('.mentor-user-report').html('<div class="text-center">' + loader.get(0).outerHTML + '</div>');
+                        $('.school-list-report').html('<div class="text-center">' + loader.get(0).outerHTML + '</div>');
                         promise = Ajax.call([{
-                                methodname: 'local_mentor_get_mentor_report',
+                                methodname: 'local_school_list',
                                 args: {
-                                    email: email,
                                     page: page,
-                                     state: state,
-                                     city: city,
+                                    name: name
+
                                 }
                             }]);
 
                         promise[0].then(function (results) {
-                            $('.mentor-user-report').html(results.html);
+                            $('.school-list-report').html(results.html);
                         }).fail(notification.exception);
                     }
                 },
                 text_filter: function () {
                     var promise;
-//                    var programid = $("#program").attr('programid');
-//                    var pfnumber = $("#pfnumber").val();
-                    var email = $("#useremail").val();
-                    var state = $("#state").val();
-                    var city = $("#city").val();
+                    var name = $("#schoolnames").val();
                     var WAITICON = {'pix': M.util.image_url("loading", 'local_mentor'), 'component': 'moodle'};
                     var loader = $('<img />')
                             .attr('src', M.util.image_url(WAITICON.pix, WAITICON.component))
                             .addClass('spinner');
                     ;
-                    $('.mentor-user-report').html('<div class="text-center">' + loader.get(0).outerHTML + '</div>');
+                    $('.school-list-report').html('<div class="text-center">' + loader.get(0).outerHTML + '</div>');
                     promise = Ajax.call([{
-                            methodname: 'local_mentor_get_mentor_report',
+                            methodname: 'local_school_list',
                             args: {
-                                email: email,
-                                 state: state,
-                                city: city,
-                                page: 0
+                                page: 0,
+                                name: name
                             }
                         }]);
 
                     promise[0].then(function (results) {
-                        $('.mentor-user-report').html(results.html);
+                        $('.school-list-report').html(results.html);
                     }).fail(notification.exception);
 
                 },
-                state_filter: function () {
-                    var promise;
-                    var email = $("#useremail").val();
-                    var state = $("#state").val();
-                    var city = $("#city").val();
-                    var WAITICON = {'pix': M.util.image_url("loading", 'local_mentor'), 'component': 'moodle'};
-                    var loader = $('<img />')
-                            .attr('src', M.util.image_url(WAITICON.pix, WAITICON.component))
-                            .addClass('spinner');
-                    ;
-                    $('.mentor-user-report').html('<div class="text-center">' + loader.get(0).outerHTML + '</div>');
-                    promise = Ajax.call([{
-                            methodname: 'local_mentor_get_mentor_report',
-                            args: {
-                                email: email,
-                                state: state,
-                                city: city,
-                                page: 0
-                            }
-                        }]);
-
-                    promise[0].then(function (results) {
-                        $('.mentor-user-report').html(results.html);
-                    }).fail(notification.exception);
-
+                show_mentors: function () {
+                    var title = $(this).attr('title');
+                    var mentorlist = $(this).attr('mentorlist');
+                    $('#basicModal').modal({show: true});
+                    $("#myModalLabel").html("<h4>" + title + "</h4>");
+                    $('.modal-body-data').html(mentorlist);
                 }
             };
 
             return {
                 setup: manager.setup
             };
+            //Function for delay the keyup event
+            function delay(callback, ms) {
+                var timer = 0;
+                return function () {
+                    var context = this, args = arguments;
+                    clearTimeout(timer);
+                    timer = setTimeout(function () {
+                        callback.apply(context, args);
+                    }, ms || 0);
+                };
+            }
         });
