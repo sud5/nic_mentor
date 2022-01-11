@@ -243,16 +243,16 @@ public static function get_inactive_mentor_parameters() {
         $attrparams = array();
         
         $where = '';
-        if(!empty($name)){
-            $where = " AND ms.name LIKE '%".$name."%'";
-            $attrparams['name'] = $name;
+        if(!empty($params['name'])){
+            $where = " AND ms.name LIKE '%".$params['name']."%'";
+            $attrparams['name'] = $params['name'];
         }
         $fields = "SELECT ms.*,mus.userid,mus.schoolid,mu.firstname,mu.lastname ";
         $sql = " FROM {school} ms 
                  LEFT JOIN (SELECT * from {user_school} WHERE role='incharge') mus on mus.schoolid=ms.id 
                  LEFT JOIN {user} mu on mu.id=mus.userid WHERE ms.activestatus=1 and mu.deleted=0 $where";
-        $schools = $DB->get_records_sql($fields . $sql , $attrparams, ($page * $perpage), $perpage);
-        $allschools = $DB->get_records_sql($fields . $sql , $attrparams);
+        $schools = $DB->get_records_sql($fields . $sql , array(), ($page * $perpage), $perpage);
+        $allschools = $DB->get_records_sql($fields . $sql , array());
 
         $renderer = $PAGE->get_renderer('local_mentor');
         $out = "";
@@ -268,6 +268,63 @@ public static function get_inactive_mentor_parameters() {
      * @return external_description
      */
     public static function school_list_returns() {
+        return $data = new external_single_structure([
+            'html' => new external_value(PARAM_RAW, 'html')
+        ]);
+    }
+    
+     /*
+     * Mentor with schools list
+     */
+
+    public static function mentor_school_list_parameters() {
+        return new external_function_parameters(
+                array(
+                    'page' => new external_value(PARAM_INT, 'page'),
+                    'name' => new external_value(PARAM_RAW, 'name')
+                )
+        );
+    }
+
+    /*
+     * Function To display select data
+     */
+
+    public static function mentor_school_list($page, $name) {
+        global $DB, $PAGE;
+        $params = self::validate_parameters(self::mentor_school_list_parameters(), array('page' => $page, 'name' => $name));
+        $out = '';
+        $context = \context_system::instance();
+        $PAGE->set_context($context);
+        $perpage = 20;
+        $attrparams = array();
+        
+        $where = '';
+        if(!empty($params['name'])){
+            $where = " AND CONCAT(u.firstname,' ',u.lastname)  LIKE  '%".$params['name']."%'";
+            $attrparams['name'] = $params['name'];
+        }
+        $fields = "SELECT u.*, ud.scormstatus,u.id as mentorid, count(CASE WHEN me.userid = u.id THEN 1 END) as meetingcount,count(CASE WHEN (me.meetingstatus = 1 AND me.parentid=u.id) THEN 1 END) as approved,count(CASE WHEN (me.meetingstatus=2 AND me.parentid=u.id) THEN 1 END) as rejected,count(CASE WHEN (me.meetingstatus=3 AND me.parentid=u.id) THEN 1 END) as completed ";
+        $sql = " FROM {user} u "
+                . " left join {user_info_data} ud on ud.userid=u.id left join (select * from {event} where eventtype='user' and parentid!=0 ) me on (u.id=me.userid or u.id=me.parentid) "
+                . " WHERE msn=4 and deleted=0 and ud.data='mentor data' $where GROUP BY u.id ORDER BY u.id ASC";
+        $availablementors = $DB->get_records_sql($fields . $sql , array(), ($page * $perpage), $perpage);
+        $allavailablementors = $DB->get_records_sql($fields . $sql , array());
+
+        $renderer = $PAGE->get_renderer('local_mentor');
+        $out = "";
+        $out .= $renderer->mentor_schools_display($availablementors, count($allavailablementors), $page, $perpage, $attrparams);
+        $html = array();
+        $html['html'] = $out;
+        return $html;
+    }
+
+    /**
+     * Returns description of method result value
+     *
+     * @return external_description
+     */
+    public static function mentor_school_list_returns() {
         return $data = new external_single_structure([
             'html' => new external_value(PARAM_RAW, 'html')
         ]);

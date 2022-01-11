@@ -164,13 +164,17 @@ class local_mentor_renderer extends plugin_renderer_base {
         $table->attributes = array('class' => 'table');
         foreach ($schools as $school) {
             $data = [];
-            $data[] = $school->name;
+            $schoollink = new moodle_url('/atalfeatures/schooldetail.php', array('id'=>$school->id));
+            $schoollinkhtml = html_writer::link($schoollink, $school->name, array("target"=>"_blank"));
+            $data[] = $schoollinkhtml;
             $mentordata = $DB->get_records_sql("SELECT mus.id,mu.id as userid,mu.firstname FROM {user_school} mus JOIN {user} mu on mu.id=mus.userid WHERE mus.schoolid=$school->id and role='mentor'");
             $mentorhtml = '';
             if ($mentordata) {
                 $mentorhtml .= html_writer::start_tag('ul', array('class' => "list-group"));
                 foreach ($mentordata as $mentor) {
-                    $mentorhtml .= html_writer::tag('li', $mentor->firstname, array('class' => "list-group-item"));
+                    $detailpagelink = $CFG->wwwroot.'/search/profile.php?key='.encryptdecrypt_userid($mentor->id,"en");
+                    $mentorlink = html_writer::link($detailpagelink, $mentor->firstname, array("target"=>"_blank"));
+                    $mentorhtml .= html_writer::tag('li', $mentorlink, array('class' => "list-group-item"));
                 }
                 $mentorhtml .= html_writer::end_tag('ul');
             }
@@ -209,6 +213,14 @@ class local_mentor_renderer extends plugin_renderer_base {
         $outdynamic = html_writer::tag('div', '', array('class' => 'modal-body-data'));
         $out .= html_writer::tag('div', $outdynamic, array('class' => 'modal-body'));
         $out .= html_writer::start_tag('div', array('class' => 'modal-footer'));
+        $out .= html_writer::start_tag('div', array('class' => 'download-link', 'style' => "display: none;"));
+        $out .= '<form method="get" action="" class="dataformatselector m-1">
+                 <div class="form-inline text-xs-right">
+		 <input type="hidden" name="dataformat" value="csv">
+		 <input type="hidden" name="mentorid" id="mentorid" value="">
+                 <button type="submit" class="btn btn-secondary">Download</button>
+                  </div></form>';
+        $out .= html_writer::end_tag('div');
         $out .= '<button type="button" id="btnClose" class="btn  btn-primary" data-dismiss="modal">Close</button>';
         $out .= html_writer::end_tag('div');
         $out .= html_writer::end_tag('div');
@@ -339,7 +351,75 @@ public function mentor_session_report_display($availablementors, $totalmentors, 
         echo $output;
     }
     
-        public function download_buttons($baseurl) {
+    /*
+     * Display schools list
+     */
+    public function mentor_schools_display($mentors, $totalmentor, $page, $perpage, $allparams) {
+        global $DB, $CFG, $OUTPUT;
+        $out = '';
+        $out .= html_writer::tag('p', get_string('noofparticipantscount', 'local_mentor', $totalmentor), array('class' => 'text-black text-right mb-2'));
+        if ($totalmentor == 0) {
+            return html_writer::div(get_string('nothingtodisplay', 'local_mentor'), 'alert alert-info mt-3');
+        }
+        $table = new html_table();
+        $table->head = array(get_string('fullname', 'local_mentor'), get_string('noofschool', 'local_mentor'));
+        $table->attributes = array('class' => 'table');
+        foreach ($mentors as $mentor) {
+            $data = [];
+            $detailpagelink = $CFG->wwwroot.'/search/profile.php?key='.encryptdecrypt_userid($mentor->mentorid,"en");
+            $link = html_writer::link($detailpagelink, $mentor->firstname. ' '.$mentor->lastname, array("target"=>"_blank"));
+            $data[] = $link;
+            $sql = "SELECT sc.id as schoolid, sc.name as schoolname,sc.atl_id, us.userid FROM {user_school} us LEFT JOIN {school} sc on sc.id=us.schoolid 
+                    WHERE us.userid= :user";
+            $schoollist = $DB->get_records_sql($sql, array("user"=> $mentor->id));
+            $schoolhtml = '';
+            if ($schoollist) {
+                $schoolhtml .= html_writer::start_tag('ul', array('class' => "list-group"));
+                foreach ($schoollist as $school) {
+                    $schoollink = new moodle_url('/atalfeatures/schooldetail.php', array('id'=>$school->schoolid));
+                    $schoollinkhtml = html_writer::link($schoollink, $school->schoolname, array("target"=>"_blank"));
+                    $schoolhtml .= html_writer::tag('li', $schoollinkhtml, array('class' => "list-group-item"));
+                }
+                $schoolhtml .= html_writer::end_tag('ul');
+            }
+            $attribute = [];
+            $attribute['class'] = "btn btn-link showmentor";
+            $attribute['title'] =  $mentor->firstname. ' '.$mentor->lastname. " (Schools)";
+            $attribute['mentorid'] = $mentor->id;
+            $attribute['mentorlist'] = $schoolhtml;
+            $attribute['schoollink'] = $CFG->wwwroot.'/local/mentor/download/mentorschool.php?mentorid='.$mentor->id;
+            $schoollink = html_writer::tag('button', count($schoollist), $attribute);
+            $data[] = $schoollink;
+
+            $table->data[] = $data;
+        }
+        $out .= html_writer::start_tag('div', array('class' => 'db-program-progress no-overflow p-3'));
+        $out .= html_writer::table($table);
+        $out .= html_writer::end_tag('div');
+        $url = new moodle_url('/local/mentor/mentorinfo.php', array('page' => $page));
+        $out .= $OUTPUT->paging_bar($totalmentor, $page, $perpage, $url);
+        $baseurl = new moodle_url('/local/mentor/download/download_metorschoolinfo.php', $allparams);
+        $out .= html_writer::tag('div', $this->download_buttons($baseurl), array('class' => 'text-white mt-3 mb-3'));
+        return $out;
+    }
+    /*
+     * Show filter for program report
+     */
+
+    function mentor_school_filter() {
+        $output = "";
+        $output .= html_writer::start_div('form-inline form-group');
+        $output .= html_writer::start_div("row");
+        $output .= html_writer::start_div("form-group col-xs-6");
+        $output .= html_writer::label('mentorname', "mentornames", true, array('class' => "sr-only"));
+        $output .= html_writer::tag('input', '', array("type" => "text", "class" => "form-control", "placeholder" => "Mentor name", 'id' => "mentornames"));
+        $output .= html_writer::end_div();
+        $output .= html_writer::end_div();
+        $output .= html_writer::end_div();
+        echo $output;
+    }
+    
+    public function download_buttons($baseurl) {
         return $this->download_dataformat_selector(get_string('downloadas', 'table'), $baseurl->out_omit_querystring(), 'dataformat', $baseurl->params());
     }
 }

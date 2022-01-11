@@ -11,7 +11,7 @@ require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->libdir . '/dataformatlib.php');
 $format = optional_param('dataformat', '', PARAM_TEXT);
 $sesskey = optional_param('sesskey', '', PARAM_ALPHANUMEXT);
-$name = optional_param('name', '', PARAM_ALPHANUMEXT);
+$name = optional_param('name', '', PARAM_TEXT);
 require_sesskey();
 require_login();
 global $DB;
@@ -32,6 +32,7 @@ if ($format) {
          LEFT JOIN (SELECT * from {user_school} WHERE role='incharge') mus on mus.schoolid=ms.id 
          LEFT JOIN {user} mu on mu.id=mus.userid WHERE ms.activestatus=1 and mu.deleted=0 $where";
     $schools = $DB->get_records_sql($fields . $sql, $params);
+
     $allschools = [];
     foreach ($schools as $school) {
         $mentordata = $DB->get_records_sql("SELECT mus.id,mu.id as userid,mu.firstname FROM {user_school} mus JOIN {user} mu on mu.id=mus.userid WHERE mus.schoolid=$school->id and role='mentor'");

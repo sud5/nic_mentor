@@ -50,4 +50,5 @@ $string['session_type']='Session Type ';
 $string['total_students']='Total Students';
 $string['session_date']='Session Date';
 $string['session_description']='Session Description';
-//$string['dob'] = 'Date of birth';
+$string['mentorsname'] = 'Mentors name';
+$string['noofschool'] = 'No of Schools';
