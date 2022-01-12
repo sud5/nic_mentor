@@ -16,15 +16,11 @@ define(['jquery', 'jqueryui', 'core/ajax', 'core/str', 'core/form-autocomplete',
                 pagination: function (e) {
                     e.preventDefault();
                     var page_val = $(this).attr('href');
-                    var page_val = page_val.match(/(\d+)/g);
-                    var page_val = $.trim(page_val);
-                    var page = parseInt(page_val);
+                    var page = getURLParameter('page', page_val);
                     if (isNaN(page)) {
                         e.preventDefault();
                     } else {
                         var promise;
-//                        var programid = $("#program").attr('programid');
-//                        var pfnumber = $("#pfnumber").val();
                         var email = $("#useremail").val();
                         var city = $("#city").val();
                         var state = $("#state").val();
@@ -52,8 +48,6 @@ define(['jquery', 'jqueryui', 'core/ajax', 'core/str', 'core/form-autocomplete',
                 },
                 text_filter: function () {
                     var promise;
-//                    var programid = $("#program").attr('programid');
-//                    var pfnumber = $("#pfnumber").val();
                     var email = $("#useremail").val();
                     var city = $("#city").val();
                     var state = $("#state").val();
@@ -70,7 +64,6 @@ define(['jquery', 'jqueryui', 'core/ajax', 'core/str', 'core/form-autocomplete',
                                 email: email,
                                 city: city,
                                 state:state
-//                                programid: programid,
                             }
                         }]);
 
@@ -80,7 +73,9 @@ define(['jquery', 'jqueryui', 'core/ajax', 'core/str', 'core/form-autocomplete',
 
                 }
             };
-
+            function getURLParameter(name, page_val) {
+                return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(page_val) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+            }
             return {
                 setup: manager.setup
             };

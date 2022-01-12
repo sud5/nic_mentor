@@ -183,6 +183,7 @@ class local_mentor_renderer extends plugin_renderer_base {
             $attribute['title'] = $school->name. " (Mentors)";
             $attribute['schoolid'] = $school->id;
             $attribute['mentorlist'] = $mentorhtml;
+            $attribute['mentorlink'] = $CFG->wwwroot.'/local/mentor/download/schoolmentor.php?schoolid='.$school->id;
             $mentorlink = html_writer::tag('button', count($mentordata), $attribute);
             $data[] = $mentorlink;
 
@@ -217,7 +218,7 @@ class local_mentor_renderer extends plugin_renderer_base {
         $out .= '<form method="get" action="" class="dataformatselector m-1">
                  <div class="form-inline text-xs-right">
 		 <input type="hidden" name="dataformat" value="csv">
-		 <input type="hidden" name="mentorid" id="mentorid" value="">
+		 <input type="hidden" name="reportid" id="reportid" value="">
                  <button type="submit" class="btn btn-secondary">Download</button>
                   </div></form>';
         $out .= html_writer::end_tag('div');

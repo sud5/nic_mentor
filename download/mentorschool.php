@@ -11,7 +11,7 @@ require(__DIR__ . '../../../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->libdir . '/dataformatlib.php');
 $format = optional_param('dataformat', '', PARAM_TEXT);
-$mentorid = optional_param('mentorid', '', PARAM_ALPHANUMEXT);
+$mentorid = optional_param('reportid', '', PARAM_ALPHANUMEXT);
 require_login();
 global $DB;
 
@@ -38,7 +38,7 @@ if ($format) {
             $allmentors[] = $tmpdata;
         }
     }
-    $name = "mentors_schools";
+    $name = $mentorname;
     $allmentors = (object) $allmentors;
     $filename = clean_filename($name);
     $user = new ArrayObject($allmentors);

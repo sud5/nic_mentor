@@ -16,9 +16,7 @@ define(['jquery', 'jqueryui', 'core/ajax', 'core/str', 'core/form-autocomplete',
                 pagination: function (e) {
                     e.preventDefault();
                     var page_val = $(this).attr('href');
-                    var page_val = page_val.match(/(\d+)/g);
-                    var page_val = $.trim(page_val);
-                    var page = parseInt(page_val);
+                    var page = getURLParameter('page', page_val);
                     if (isNaN(page)) {
                         e.preventDefault();
                     } else {
@@ -74,7 +72,7 @@ define(['jquery', 'jqueryui', 'core/ajax', 'core/str', 'core/form-autocomplete',
                     var dwnload = $(this).attr('schoollink');
                     $('form').attr('action', dwnload);
                     var mid = $(this).attr('mentorid');
-                    $('#mentorid').val(mid);
+                    $('#reportid').val(mid);
                     $('.download-link').attr('style', 'none');
                     $('.modal-body-data').html(mentorlist);
                 }
@@ -83,6 +81,9 @@ define(['jquery', 'jqueryui', 'core/ajax', 'core/str', 'core/form-autocomplete',
             return {
                 setup: manager.setup
             };
+            function getURLParameter(name, page_val) {
+                return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(page_val) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+            }
             //Function for delay the keyup event
             function delay(callback, ms) {
                 var timer = 0;
