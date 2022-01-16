@@ -166,14 +166,16 @@ public static function get_inactive_mentor_parameters() {
                 array(
                    'page' => new external_value(PARAM_INT, 'page'),
                    'email' => new external_value(PARAM_RAW, 'email'),
+                   'city' => new external_value(PARAM_RAW, 'city'),
+                   'state' => new external_value(PARAM_RAW, 'state'),
 
                 )
         );
     }
 
-    public static function get_mentor_sessions($page, $email) {
+    public static function get_mentor_sessions($page, $email, $city, $state) {
         global $DB, $CFG, $PAGE;
-        $params = self::validate_parameters(self::get_mentor_sessions_parameters(), array('page' => $page, 'email' => $email));
+        $params = self::validate_parameters(self::get_mentor_sessions_parameters(), array('page' => $page, 'email' => $email, 'city' => $city, 'state' =>  $state));
         $context = context_system::instance();
         $PAGE->set_context($context);
         $where = '';
@@ -185,6 +187,14 @@ public static function get_inactive_mentor_parameters() {
             $email = $params['email'];
 //            $where .= " AND CONCAT(u.firstname,' ',u.lastname)  LIKE  '%".$fullname."%'";
             $where .= " AND mu.email LIKE  '%".$email."%'";
+        }
+        if(!empty($params['city'])){
+            $city = $params['city'];
+            $where .= " AND mu.city LIKE  '%".$city."%'";
+        }
+        if(!empty($params['state'])){
+            $state = $params['state'];
+            $where .= " AND s.id = $state";
         }
         $perpage= 20;
         $mentorparams = array();
@@ -281,7 +291,7 @@ public static function get_inactive_mentor_parameters() {
         return new external_function_parameters(
                 array(
                     'page' => new external_value(PARAM_INT, 'page'),
-                    'name' => new external_value(PARAM_RAW, 'name')
+                    'email' => new external_value(PARAM_RAW, 'email')
                 )
         );
     }
@@ -290,9 +300,9 @@ public static function get_inactive_mentor_parameters() {
      * Function To display select data
      */
 
-    public static function mentor_school_list($page, $name) {
+    public static function mentor_school_list($page, $email) {
         global $DB, $PAGE;
-        $params = self::validate_parameters(self::mentor_school_list_parameters(), array('page' => $page, 'name' => $name));
+        $params = self::validate_parameters(self::mentor_school_list_parameters(), array('page' => $page, 'email' => $email));
         $out = '';
         $context = \context_system::instance();
         $PAGE->set_context($context);
@@ -300,9 +310,9 @@ public static function get_inactive_mentor_parameters() {
         $attrparams = array();
         
         $where = '';
-        if(!empty($params['name'])){
-            $where = " AND CONCAT(u.firstname,' ',u.lastname)  LIKE  '%".$params['name']."%'";
-            $attrparams['name'] = $params['name'];
+        if(!empty($params['email'])){
+            $where = " AND u.email LIKE '%".$params['email']."%'";
+            $attrparams['email'] = $params['email'];
         }
         $fields = "SELECT u.*, ud.scormstatus,u.id as mentorid, count(CASE WHEN me.userid = u.id THEN 1 END) as meetingcount,count(CASE WHEN (me.meetingstatus = 1 AND me.parentid=u.id) THEN 1 END) as approved,count(CASE WHEN (me.meetingstatus=2 AND me.parentid=u.id) THEN 1 END) as rejected,count(CASE WHEN (me.meetingstatus=3 AND me.parentid=u.id) THEN 1 END) as completed ";
         $sql = " FROM {user} u "

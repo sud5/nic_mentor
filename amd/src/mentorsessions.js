@@ -10,7 +10,8 @@ define(['jquery', 'jqueryui', 'core/ajax', 'core/str', 'core/form-autocomplete',
             var manager = {
                 setup: function () {
                     $(document).on('click', '.page-link', manager.pagination);
-                    $(document).on('keyup', '#useremail', manager.text_filter);
+                    $(document).on('keyup', '#city, #useremail', manager.text_filter);
+                    $(document).on('change', '#state', manager.text_filter);
                 },
                 pagination: function (e) {
                     e.preventDefault();
@@ -22,6 +23,8 @@ define(['jquery', 'jqueryui', 'core/ajax', 'core/str', 'core/form-autocomplete',
                     } else {
                         var promise;
                         var email = $("#useremail").val();
+                        var city = $("#city").val();
+                        var state = $("#state").val();
                         var WAITICON = {'pix': M.util.image_url("loading", 'local_mentor'), 'component': 'moodle'};
                         var loader = $('<img />')
                                 .attr('src', M.util.image_url(WAITICON.pix, WAITICON.component))
@@ -32,7 +35,9 @@ define(['jquery', 'jqueryui', 'core/ajax', 'core/str', 'core/form-autocomplete',
                                 methodname: 'local_mentor_session_report',
                                 args: {
                                     page: page,
-                                    email: email
+                                    email: email,
+                                    city: city,
+                                    state:state
                                     
                                 }
                             }]);
@@ -45,6 +50,8 @@ define(['jquery', 'jqueryui', 'core/ajax', 'core/str', 'core/form-autocomplete',
                 text_filter: function () {
                     var promise;
                     var email = $("#useremail").val();
+                    var city = $("#city").val();
+                    var state = $("#state").val();
                     var WAITICON = {'pix': M.util.image_url("loading", 'local_mentor'), 'component': 'moodle'};
                     var loader = $('<img />')
                             .attr('src', M.util.image_url(WAITICON.pix, WAITICON.component))
@@ -56,6 +63,8 @@ define(['jquery', 'jqueryui', 'core/ajax', 'core/str', 'core/form-autocomplete',
                             args: {
                                 page: 0,
                                 email: email,
+                                city: city,
+                                state:state
                             }
                         }]);
 

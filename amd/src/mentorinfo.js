@@ -10,7 +10,7 @@ define(['jquery', 'jqueryui', 'core/ajax', 'core/str', 'core/form-autocomplete',
             var manager = {
                 setup: function () {
                     $(document).on('click', '.page-link', manager.pagination);
-                    $(document).on('keyup', '#mentornames', delay(manager.text_filter, 1000));
+                    $(document).on('keyup', '#useremail', delay(manager.text_filter, 1000));
                     $(document).on('click', '.showmentor', manager.show_mentors);
                 },
                 pagination: function (e) {
@@ -21,7 +21,7 @@ define(['jquery', 'jqueryui', 'core/ajax', 'core/str', 'core/form-autocomplete',
                         e.preventDefault();
                     } else {
                         var promise;
-                        var name = $("#mentornames").val();
+                        var email = $("#useremail").val();
                         var WAITICON = {'pix': M.util.image_url("loading", 'local_mentor'), 'component': 'moodle'};
                         var loader = $('<img />')
                                 .attr('src', M.util.image_url(WAITICON.pix, WAITICON.component))
@@ -32,7 +32,7 @@ define(['jquery', 'jqueryui', 'core/ajax', 'core/str', 'core/form-autocomplete',
                                 methodname: 'local_mentor_school_list',
                                 args: {
                                     page: page,
-                                    name: name
+                                    email: email
 
                                 }
                             }]);
@@ -44,7 +44,7 @@ define(['jquery', 'jqueryui', 'core/ajax', 'core/str', 'core/form-autocomplete',
                 },
                 text_filter: function () {
                     var promise;
-                    var name = $("#mentornames").val();
+                    var email = $("#useremail").val();
                     var WAITICON = {'pix': M.util.image_url("loading", 'local_mentor'), 'component': 'moodle'};
                     var loader = $('<img />')
                             .attr('src', M.util.image_url(WAITICON.pix, WAITICON.component))
@@ -55,7 +55,7 @@ define(['jquery', 'jqueryui', 'core/ajax', 'core/str', 'core/form-autocomplete',
                             methodname: 'local_mentor_school_list',
                             args: {
                                 page: 0,
-                                name: name
+                                email: email
                             }
                         }]);
 

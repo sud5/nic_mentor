@@ -43,7 +43,7 @@ if ($format) {
     $iterator = $user->getIterator();
 
     $countrecord = 0;
-    \core\dataformat::download_data($filename, $format, $headers, $iterator, function ($mentor) {
+    download_as_dataformat($filename, $format, $headers, $iterator, function ($mentor) {
         global $DB;
         $data = [];
         $data[] = $mentor->name;

@@ -297,7 +297,7 @@ public function mentor_session_report_display($availablementors, $totalmentors, 
             return html_writer::div(get_string('nothingtodisplay', 'local_mentor'), 'alert alert-info mt-3');
         }
         $table = new html_table();
-        $table->head = array(get_string('fullname', 'local_mentor'), get_string('email'),
+        $table->head = array(get_string('fullname', 'local_mentor'), get_string('email'), get_string('state'),get_string('city'),
           get_string('school', 'local_mentor'),get_string('session_time', 'local_mentor'), get_string('total_hours', 'local_mentor'),
           get_string('session_type', 'local_mentor'),get_string('total_students', 'local_mentor'), get_string('session_date', 'local_mentor'),
           get_string('session_description', 'local_mentor'));
@@ -307,6 +307,8 @@ public function mentor_session_report_display($availablementors, $totalmentors, 
             $data = [];
             $data[] = $mentor->firstname. ' '.$mentor->lastname;
             $data[] = $mentor->email;
+            $data[] = $mentor->state;
+            $data[] = $mentor->city;
             $data[] = $mentor->schoolname;
             $data[] = format_timeforReport($mentor->starttime).' - '.format_timeforReport($mentor->endtime);
             $data[] = showTimeFromDB($mentor->totaltime);
@@ -339,11 +341,24 @@ public function mentor_session_report_display($availablementors, $totalmentors, 
         $output = "";
         $output .= html_writer::start_div('form-inline form-group');
         $output .= html_writer::start_div("row");
-        $output .= html_writer::start_div("form-group col-xs-6");
+        $output .= html_writer::start_div("form-group col-xs-3");
         $output .= html_writer::label('email', "useremail", true, array('class' => "sr-only"));
         $output .= html_writer::tag('input', '', array("type" => "text", "class" => "form-control", "placeholder" => "Email", 'id' => "useremail"));
         $output .= html_writer::end_div();
-        $output .= html_writer::start_div("form-group col-xs-6");
+                $output .= html_writer::start_div("form-group col-xs-3");
+        $sql = "select s.id, s.name as statename from {state} as s";
+        $allavailablestates = $DB->get_records_sql($sql);
+        $states = array();
+        foreach($allavailablestates as &$allavailablestates){
+            $states[$allavailablestates->id] = $allavailablestates->statename;
+        }
+        $output .= html_writer::select($states,'select',null,'Select State',array('id' => "state"));
+        $output .= html_writer::end_div();
+        $output .= html_writer::start_div("form-group col-xs-3");
+        $output .= html_writer::label('city', "city", true, array('class' => "sr-only"));
+        $output .= html_writer::tag('input', '', array("type" => "text", "class" => "form-control", "placeholder" => "City", 'id' => "city"));
+        $output .= html_writer::end_div();
+        $output .= html_writer::start_div("form-group col-xs-3");
         $url = new moodle_url("mentor_sessions.php");
         $output .= html_writer::link($url,"Reset Filters",array('class' => 'btn btn-primary'));
         $output .= html_writer::end_div();
@@ -363,13 +378,14 @@ public function mentor_session_report_display($availablementors, $totalmentors, 
             return html_writer::div(get_string('nothingtodisplay', 'local_mentor'), 'alert alert-info mt-3');
         }
         $table = new html_table();
-        $table->head = array(get_string('fullname', 'local_mentor'), get_string('noofschool', 'local_mentor'));
+        $table->head = array(get_string('fullname', 'local_mentor'), get_string('email'), get_string('noofschool', 'local_mentor'));
         $table->attributes = array('class' => 'table');
         foreach ($mentors as $mentor) {
             $data = [];
             $detailpagelink = $CFG->wwwroot.'/search/profile.php?key='.encryptdecrypt_userid($mentor->mentorid,"en");
             $link = html_writer::link($detailpagelink, $mentor->firstname. ' '.$mentor->lastname, array("target"=>"_blank"));
             $data[] = $link;
+            $data[] = $mentor->email;
             $sql = "SELECT sc.id as schoolid, sc.name as schoolname,sc.atl_id, us.userid FROM {user_school} us LEFT JOIN {school} sc on sc.id=us.schoolid 
                     WHERE us.userid= :user";
             $schoollist = $DB->get_records_sql($sql, array("user"=> $mentor->id));
@@ -411,9 +427,13 @@ public function mentor_session_report_display($availablementors, $totalmentors, 
         $output = "";
         $output .= html_writer::start_div('form-inline form-group');
         $output .= html_writer::start_div("row");
-        $output .= html_writer::start_div("form-group col-xs-6");
-        $output .= html_writer::label('mentorname', "mentornames", true, array('class' => "sr-only"));
-        $output .= html_writer::tag('input', '', array("type" => "text", "class" => "form-control", "placeholder" => "Mentor name", 'id' => "mentornames"));
+        $output .= html_writer::start_div("form-group col-xs-3");
+        $output .= html_writer::label('email', "useremail", true, array('class' => "sr-only"));
+        $output .= html_writer::tag('input', '', array("type" => "text", "class" => "form-control", "placeholder" => "Email", 'id' => "useremail"));
+        $output .= html_writer::end_div();
+        $output .= html_writer::start_div("form-group col-xs-3");
+        $url = new moodle_url("mentorinfo.php");
+        $output .= html_writer::link($url,"Reset Filters",array('class' => 'btn btn-primary'));
         $output .= html_writer::end_div();
         $output .= html_writer::end_div();
         $output .= html_writer::end_div();

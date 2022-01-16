@@ -32,7 +32,7 @@ if ($format) {
     $iterator = $user->getIterator();
 
     $countrecord = 0;
-    \core\dataformat::download_data($filename, $format, $headers, $iterator, function($user) {
+    download_as_dataformat($filename, $format, $headers, $iterator, function($user) {
         global $DB;
         $data = array();
         $data[] = $user->firstname.' '.$user->lastname;
