@@ -17,6 +17,8 @@ switch ($action) {
             foreach ($cities as $id => $value) {
                 $out .= html_writer::tag('option', $value, array('value' => $id));
             }
+        }else{
+            $out .= html_writer::tag('option', 'Select city', array('value' =>0));
         }
 
         $html = array();

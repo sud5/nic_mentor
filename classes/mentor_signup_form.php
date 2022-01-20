@@ -36,13 +36,24 @@ class mentor_signup_form extends moodleform {
         $mform->addRule('gender', null, 'required', null, 'client');
         $mform->addElement('date_selector', 'dob', get_string('dob', 'local_mentor')); // Add elements to your form
         $mform->addRule('dob', null, 'required', null, 'client');
+        $select = array('0' => "Select state");
         $state = $DB->get_records_menu('state', array());
+        $state = array_merge($select, $state);
         $mform->addElement('select', 'state', get_string('state', 'local_mentor'), $state);
         $mform->addRule('state', null, 'required', null, 'client');
-        $cities = $DB->get_records_menu('city', array('stateid' => 1));
+        if(isset($_POST['state'])){
+             $mform->setDefault('state', $_POST['state']);
+        }
+        $cities = array('0' => "Select city");
+        if(isset($_POST['city'])){
+            $cities = $DB->get_records_menu('city', array('stateid' => $_POST['state']));
+        }
+//        $cities = array_merge($select, $cities);
         $mform->addElement('select', 'city', get_string('city', 'local_mentor'), $cities);
         $mform->addRule('city', null, 'required', null, 'client');
-//        $mform->setDefault('cityid', $cities);
+        if(isset($_POST['city'])){
+             $mform->setDefault('cityid', $_POST['city']);
+        }
         
         $mform->addElement('text', 'linkedin', get_string('linkedin', 'local_mentor')); // Add elements to your form
         $mform->setType('linkedin', PARAM_TEXT);
@@ -57,7 +68,6 @@ class mentor_signup_form extends moodleform {
 //        $mform->setType('email', PARAM_TEXT);
 //        $this->set_data($data);
         $mform->disable_form_change_checker();
-//        print_object($this->curren);die;
     }
 
     //Custom validation should be added here
@@ -75,6 +85,16 @@ class mentor_signup_form extends moodleform {
             $errors['email'] = get_string('alreadyrequested', 'local_mentor');
         } else if ($DB->record_exists_select('user', $select, $params)) {
             $errors['email'] = get_string('emailexists');
+        }
+        if($data['state'] == 0){
+            $errors['state'] = get_string('missingstate', 'local_mentor');
+        }
+        if(!isset($_POST['city']) || $_POST['city'] ==0 || $data['city'] == 0){
+            $errors['city'] = get_string('missingcity', 'local_mentor');
+        }
+        $lasttwntyfour = time() - 86400;
+        if($data['dob']>= $lasttwntyfour){
+             $errors['dob'] = get_string('errordob', 'local_mentor');
         }
         return $errors;
     }

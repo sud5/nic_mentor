@@ -11,7 +11,7 @@ require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->libdir . '/dataformatlib.php');
 $format = optional_param('dataformat', '', PARAM_TEXT);
 $sesskey = optional_param('sesskey', '', PARAM_ALPHANUMEXT);
-$name = optional_param('name', '', PARAM_ALPHANUMEXT);
+$name = optional_param('email', '', PARAM_TEXT);
 require_sesskey();
 require_login();
 global $DB;
@@ -19,7 +19,7 @@ global $DB;
 if ($format) {
     $where = '';
     if (!empty($name)) {
-         $where = " AND CONCAT(u.firstname,' ',u.lastname)  LIKE  '%".$name."%'";
+         $where = " AND u.email  LIKE  '%".$name."%'";
     }
     // Define the headers and columns.
     $headers = [];

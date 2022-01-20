@@ -54,3 +54,6 @@ $string['mentorsname'] = 'Mentors name';
 $string['noofschool'] = 'No of Schools';
 $string['noofsession'] = 'No of Sessions';
 $string['mentoringhours'] = 'Mentoring hours';
+$string['missingstate'] = 'Please select state.';
+$string['missingcity'] = 'Please select city.';
+$string['errordob'] = 'Please enter correct Date of Birth.';

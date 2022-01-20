@@ -15,9 +15,10 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading("Mentor History");
 
 $params = array();
-$countfields = 'SELECT COUNT(mu.id)';
-$fields = "SELECT msr.*, s.name as state, mu.id as mentorid,mu.email,mu.city, mu.firstname,mu.lastname, CONCAT(mu.firstname,' ',mu.lastname) as mentorname,ms.name as schoolname,ms.id as schoolid,ms.atl_id as schoolatlid";
-$sql = " FROM {mentor_sessionrpt} msr join {user} mu on mu.id=msr.mentorid join {school} ms on msr.schoolid=ms.id left join {state} s on s.id=mu.aim WHERE mu.deleted=0";
+$fields = "SELECT u.*,ud.scormstatus, u.id as mentorid, count(CASE WHEN me.userid = u.id THEN 1 END) as meetingcount,count(CASE WHEN (me.meetingstatus = 1 AND me.parentid=u.id) THEN 1 END) as approved,count(CASE WHEN (me.meetingstatus=2 AND me.parentid=u.id) THEN 1 END) as rejected,count(CASE WHEN (me.meetingstatus=3 AND me.parentid=u.id) THEN 1 END) as completed ";
+$sql = " FROM {user} u "
+        . " left join {user_info_data} ud on ud.userid=u.id left join (select * from {event} where eventtype='user' and parentid!=0 ) me on (u.id=me.userid or u.id=me.parentid) "
+        . "WHERE msn=4 and deleted=0 and ud.data='mentor data' group by u.id order by u.id ASC";
 $availablementors = $DB->get_records_sql($fields . $sql , $params, ($page * $perpage), $perpage);
 $allavailablementors = $DB->get_records_sql($fields . $sql , $params);
 
