@@ -107,12 +107,14 @@ function create_mentor($mentordata) {
         $userinfodataid = $DB->insert_record('user_info_data', $infodata);
         //echo $userinfodataid;				
         $usercontext = context_user::instance($id);
+        if(isset($schoolid)){
         if ($schoolid != '' && $schoolid != 0) {
             $school = new stdClass();
             $school->userid = $id;
             $school->schoolid = $schoolid;
             $school->role = 'mentor';
             $text = $DB->insert_record('user_school', $school);
+        }
         }
         //die;
         $transaction->allow_commit();

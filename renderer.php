@@ -491,6 +491,90 @@ public function mentor_history_display($availablementors, $totalmentors, $page, 
         $output .= html_writer::end_div();
         echo $output;
     }    
+    
+    /*
+     * 
+     */
+    public function school_database($schools, $totalschools, $page, $perpage, $allparams) {
+        global $DB, $CFG, $OUTPUT;
+        $out = '';
+        $baseurl = new moodle_url('/local/mentor/download/download_schooldatabase.php', $allparams);
+        $out .= html_writer::tag('div', $this->download_buttons($baseurl), array('class' => 'text-white mt-3 mb-3'));
+        $out .= html_writer::tag('p', get_string('noofschools', 'local_mentor', $totalschools), array('class' => 'text-black text-right mb-2'));
+    if ($totalschools == 0) {
+      return html_writer::div(get_string('nothingtodisplay', 'local_mentor'), 'alert alert-info mt-3');
+    }
+    $mentor_student_time = $DB->get_records_sql("SELECT schoolid,count(id) as total_session ,SUM(totalstudents) as totalstudents FROM {mentor_sessionrpt} group by schoolid");
+    $mentor_student_array = array();
+    $mentor_session_array = array();
+    foreach ($mentor_student_time as &$mentor_student_time) {
+      $mentor_student_array[$mentor_student_time->schoolid] = $mentor_student_time->totalstudents;
+      $mentor_session_array[$mentor_student_time->schoolid] = $mentor_student_time->total_session;
+    }
+    $table = new html_table();
+    $table->head = array(get_string('fullname', 'local_mentor'), get_string('noofmentor', 'local_mentor')
+      , get_string('number_of_students', 'local_mentor'), get_string('mentoring_sessions', 'local_mentor'));
+    $table->attributes = array('class' => 'table');
+    foreach ($schools as $school) {
+            $data = [];
+            $schoollink = new moodle_url('/atalfeatures/schooldetail.php', array('id'=>$school->id));
+            $schoollinkhtml = html_writer::link($schoollink, $school->name, array("target"=>"_blank"));
+            $data[] = $schoollinkhtml;
+            $mentordata = $DB->get_records_sql("SELECT mus.id,mu.id as userid,mu.firstname FROM {user_school} mus JOIN {user} mu on mu.id=mus.userid WHERE mus.schoolid=$school->id and role='mentor'");
+            $mentorhtml = '';
+            if ($mentordata) {
+                $mentorhtml .= html_writer::start_tag('ul', array('class' => "list-group"));
+                foreach ($mentordata as $mentor) {
+                    $number_of_students = array_key_exists($school->id,$mentor_student_array) ?$mentor_student_array[$school->id] :0;
+                    $number_of_sessions = array_key_exists($school->id,$mentor_session_array) ?$mentor_session_array[$school->id] :0;
+                    $detailpagelink = $CFG->wwwroot.'/search/profile.php?key='.encryptdecrypt_userid($mentor->id,"en");
+                    $mentorlink = html_writer::link($detailpagelink, $mentor->firstname, array("target"=>"_blank"));
+                    $mentorhtml .= html_writer::tag('li', $mentorlink, array('class' => "list-group-item"));
+                }
+                $mentorhtml .= html_writer::end_tag('ul');
+            }
+//            $attribute = [];
+//            $attribute['class'] = "btn btn-link showmentor";
+//            $attribute['title'] = $school->name. " (Mentors)";
+//            $attribute['schoolid'] = $school->id;
+//            $attribute['mentorlist'] = $mentorhtml;
+//            $attribute['mentorlink'] = $CFG->wwwroot.'/local/mentor/download/schoolmentor.php?schoolid='.$school->id;
+//            $mentorlink = html_writer::tag('button', count($mentordata), $attribute);
+            $data[] = count($mentordata);
+            $data[] = $number_of_students;
+            $data[] = $number_of_sessions;
+
+            $table->data[] = $data;
+        }
+        $out .= html_writer::start_tag('div', array('class' => 'db-program-progress no-overflow p-3'));
+        $out .= html_writer::table($table);
+        $out .= html_writer::end_tag('div');
+        $url = new moodle_url('/local/mentor/schools.php', array('page' => $page));
+        $out .= $OUTPUT->paging_bar($totalschools, $page, $perpage, $url);
+        return $out;
+    }
+    
+            /*
+     * Show filter for program report
+     */
+
+    function school_database_filter() {
+        $output = "";
+        $output .= html_writer::start_div('form-inline form-group');
+        $output .= html_writer::start_div("row");
+        $output .= html_writer::start_div("form-group col-xs-6");
+        $output .= html_writer::label('schoolname', "schoolnames", true, array('class' => "sr-only"));
+        $output .= html_writer::tag('input', '', array("type" => "text", "class" => "form-control", "placeholder" => "School Name", 'id' => "schoolnames"));
+        $output .= html_writer::end_div();
+        $output .= html_writer::start_div("form-group col-xs-6");
+        $url = new moodle_url("schools_database.php");
+        $output .= html_writer::link($url,"Reset Filters",array('class' => 'btn btn-primary'));
+        $output .= html_writer::end_div();
+        $output .= html_writer::end_div();
+        $output .= html_writer::end_div();
+        echo $output;
+    }
+    
     public function download_buttons($baseurl) {
         return $this->download_dataformat_selector(get_string('downloadas', 'table'), $baseurl->out_omit_querystring(), 'dataformat', $baseurl->params());
     }

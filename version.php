@@ -22,7 +22,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2020121900.07;
+$plugin->version  = 2020121900.08;
 $plugin->requires = 2019052000;
 $plugin->release = '3.10';   // Available as of Moodle 3.9.0 or later.
 $plugin->component = 'local_mentor';

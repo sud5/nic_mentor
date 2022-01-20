@@ -12,7 +12,7 @@ $PAGE->set_pagelayout('standard');
 $PAGE->set_title('Mentor Database');
 $PAGE->set_heading('Mentor Database');
 echo $OUTPUT->header();
-echo $OUTPUT->heading("Mentor History");
+echo $OUTPUT->heading("Mentor Database");
 
 $params = array();
 $fields = "SELECT u.*,ud.scormstatus, u.id as mentorid, count(CASE WHEN me.userid = u.id THEN 1 END) as meetingcount,count(CASE WHEN (me.meetingstatus = 1 AND me.parentid=u.id) THEN 1 END) as approved,count(CASE WHEN (me.meetingstatus=2 AND me.parentid=u.id) THEN 1 END) as rejected,count(CASE WHEN (me.meetingstatus=3 AND me.parentid=u.id) THEN 1 END) as completed ";

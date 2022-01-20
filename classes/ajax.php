@@ -38,6 +38,7 @@ switch ($action) {
              if($id){
                  $mentor->status = APPROVE;
                  $DB->update_record('mentor_request', $mentor);
+            echo "Approved";
              }
         }
 
