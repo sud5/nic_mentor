@@ -52,3 +52,5 @@ $string['session_date']='Session Date';
 $string['session_description']='Session Description';
 $string['mentorsname'] = 'Mentors name';
 $string['noofschool'] = 'No of Schools';
+$string['noofsession'] = 'No of Sessions';
+$string['mentoringhours'] = 'Mentoring hours';

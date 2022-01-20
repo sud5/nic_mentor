@@ -42,9 +42,18 @@ $functions = array(
         'type' => 'read',
         'capabilities' => 'local/mentor:approve_request',
     ),
-	'local_mentor_school_list' => array(
+    'local_mentor_school_list' => array(
         'classname' => 'local_mentor_external',
         'methodname' => 'mentor_school_list',
+        'classpath' => 'local/mentor/externallib.php',
+        'description' => 'Get the list of potential users to enrol',
+        'ajax' => true,
+        'type' => 'read',
+        'capabilities' => 'local/mentor:approve_request',
+    ),
+    'local_mentor_mentor_history' => array(
+        'classname' => 'local_mentor_external',
+        'methodname' => 'mentor_history',
         'classpath' => 'local/mentor/externallib.php',
         'description' => 'Get the list of potential users to enrol',
         'ajax' => true,

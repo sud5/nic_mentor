@@ -339,4 +339,58 @@ public static function get_inactive_mentor_parameters() {
             'html' => new external_value(PARAM_RAW, 'html')
         ]);
     }
+     /*
+     * Mentor with schools list
+     */
+
+    public static function mentor_history_parameters() {
+        return new external_function_parameters(
+                array(
+                    'page' => new external_value(PARAM_INT, 'page'),
+                    'email' => new external_value(PARAM_RAW, 'email')
+                )
+        );
+    }
+
+    /*
+     * Function To display select data
+     */
+
+    public static function mentor_history($page, $email) {
+        global $DB, $PAGE;
+        $params = self::validate_parameters(self::mentor_history_parameters(), array('page' => $page, 'email' => $email));
+        $out = '';
+        $context = \context_system::instance();
+        $PAGE->set_context($context);
+        $perpage = 20;
+        $attrparams = array();
+        
+        $where = '';
+        if(!empty($params['email'])){
+            $where = " AND mu.email LIKE '%".$params['email']."%'";
+            $attrparams['email'] = $params['email'];
+        }
+        $fields = "SELECT msr.*, s.name as state, mu.id as mentorid,mu.email,mu.city, mu.firstname,mu.lastname, CONCAT(mu.firstname,' ',mu.lastname) as mentorname,ms.name as schoolname,ms.id as schoolid,ms.atl_id as schoolatlid";
+        $sql = " FROM {mentor_sessionrpt} msr join {user} mu on mu.id=msr.mentorid join {school} ms on msr.schoolid=ms.id left join {state} s on s.id=mu.aim "
+                . " WHERE mu.deleted=0 $where";
+        $availablementors = $DB->get_records_sql($fields . $sql , array(), ($page * $perpage), $perpage);
+        $allavailablementors = $DB->get_records_sql($fields . $sql , array());
+        $renderer = $PAGE->get_renderer('local_mentor');
+        $out = "";
+        $out .= $renderer->mentor_history_display($availablementors, count($allavailablementors), $page, $perpage, $attrparams);
+        $html = array();
+        $html['html'] = $out;
+        return $html;
+    }
+
+    /**
+     * Returns description of method result value
+     *
+     * @return external_description
+     */
+    public static function mentor_history_returns() {
+        return $data = new external_single_structure([
+            'html' => new external_value(PARAM_RAW, 'html')
+        ]);
+    }
 }

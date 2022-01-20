@@ -439,7 +439,58 @@ public function mentor_session_report_display($availablementors, $totalmentors, 
         $output .= html_writer::end_div();
         echo $output;
     }
-    
+public function mentor_history_display($availablementors, $totalmentors, $page, $perpage, $allparams) {
+        global $DB, $CFG, $OUTPUT;
+        require_once( '../../mentor/lib.php');
+        $out = '';
+        $out .= html_writer::tag('p', get_string('noofparticipantscount', 'local_mentor', $totalmentors), array('class' => 'text-black text-right mb-2'));
+        if ($totalmentors == 0) {
+            return html_writer::div(get_string('nothingtodisplay', 'local_mentor'), 'alert alert-info mt-3');
+        }
+        $table = new html_table();
+        $table->head = array(get_string('fullname', 'local_mentor'), get_string('email'), get_string('noofschool', 'local_mentor'),
+                         get_string('noofsession', 'local_mentor'), get_string('mentoringhours', 'local_mentor'));
+        $table->attributes = array('class' => 'table');
+        foreach ($availablementors as $mentor) {
+            $sql = "SELECT count(totaltime) as noofsession, count(DISTINCT(schoolid)) as noofschool, SUM(totaltime) as mentoringhours "
+                    . "  FROM {mentor_sessionrpt} WHERE mentorid = :userid";
+            $schoolinfo = $DB->get_record_sql($sql, array("userid" => $mentor->mentorid));
+            $data = [];
+            $data[] = $mentor->firstname. ' '.$mentor->lastname;
+            $data[] = $mentor->email;
+            $sql = "SELECT sc.id as schoolid, sc.name as schoolname,sc.atl_id, us.userid FROM {user_school} us LEFT JOIN {school} sc on sc.id=us.schoolid 
+                    WHERE us.userid= :user";
+            $schoollist = $DB->get_records_sql($sql, array("user"=> $mentor->mentorid));
+            $data[] = count($schoollist);
+            $data[] = $schoolinfo->noofsession;
+            $data[] = $schoolinfo->mentoringhours ? $schoolinfo->mentoringhours: 0;
+            $table->data[] = $data;
+        }
+        $out .= html_writer::start_tag('div', array('class' => 'db-program-progress no-overflow p-3'));
+        $out .= html_writer::table($table);
+        $out .= html_writer::end_tag('div');
+        $url = new moodle_url('/local/mentor/mentor_history.php', array('page' => $page));
+        $out .= $OUTPUT->paging_bar($totalmentors, $page, $perpage, $url);
+        $baseurl = new moodle_url('/local/mentor/download/download_mentorhistory.php', $allparams);            
+        $out .= html_writer::tag('div', $this->download_buttons($baseurl), array('class' => 'text-white mt-3 mb-3'));
+        return $out;
+    }
+    function mentor_history_filter() {
+        $output = "";
+        $output .= html_writer::start_div('form-inline form-group');
+        $output .= html_writer::start_div("row");
+        $output .= html_writer::start_div("form-group col-xs-6");
+        $output .= html_writer::label('email', "useremail", true, array('class' => "sr-only"));
+        $output .= html_writer::tag('input', '', array("type" => "text", "class" => "form-control", "placeholder" => "Email", 'id' => "useremail"));
+        $output .= html_writer::end_div();
+        $output .= html_writer::start_div("form-group col-xs-6");
+        $url = new moodle_url("mentor_history.php");
+        $output .= html_writer::link($url,"Reset Filters",array('class' => 'btn btn-primary'));
+        $output .= html_writer::end_div();
+        $output .= html_writer::end_div();
+        $output .= html_writer::end_div();
+        echo $output;
+    }    
     public function download_buttons($baseurl) {
         return $this->download_dataformat_selector(get_string('downloadas', 'table'), $baseurl->out_omit_querystring(), 'dataformat', $baseurl->params());
     }

@@ -4,6 +4,7 @@ require_once '../../config.php';
 $page = optional_param('page', 0, PARAM_INT);
 $perpage = optional_param('perpage', 20, PARAM_INT);
 global $DB;
+require_login();
 $context = context_system::instance();
 $PAGE->set_context($context);
 $PAGE->set_url('/local/mentor/schools.php');
