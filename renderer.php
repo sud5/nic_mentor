@@ -155,6 +155,8 @@ class local_mentor_renderer extends plugin_renderer_base {
     public function school_display($schools, $totalschools, $page, $perpage, $allparams) {
         global $DB, $CFG, $OUTPUT;
         $out = '';
+        $baseurl = new moodle_url('/local/mentor/download/download_schoolinfo.php', $allparams);
+        $out .= html_writer::tag('div', $this->download_buttons($baseurl), array('class' => 'form-group col-xs-6'));
         $out .= html_writer::tag('p', get_string('noofschools', 'local_mentor', $totalschools), array('class' => 'text-black text-right mb-2'));
         if ($totalschools == 0) {
             return html_writer::div(get_string('nothingtodisplay', 'local_mentor'), 'alert alert-info mt-3');
@@ -172,7 +174,7 @@ class local_mentor_renderer extends plugin_renderer_base {
             if ($mentordata) {
                 $mentorhtml .= html_writer::start_tag('ul', array('class' => "list-group"));
                 foreach ($mentordata as $mentor) {
-                    $detailpagelink = $CFG->wwwroot.'/search/profile.php?key='.encryptdecrypt_userid($mentor->id,"en");
+                    $detailpagelink = $CFG->wwwroot.'/search/profile.php?key='.encryptdecrypt_userid($mentor->userid,"en");
                     $mentorlink = html_writer::link($detailpagelink, $mentor->firstname, array("target"=>"_blank"));
                     $mentorhtml .= html_writer::tag('li', $mentorlink, array('class' => "list-group-item"));
                 }
@@ -194,8 +196,7 @@ class local_mentor_renderer extends plugin_renderer_base {
         $out .= html_writer::end_tag('div');
         $url = new moodle_url('/local/mentor/schools.php', array('page' => $page));
         $out .= $OUTPUT->paging_bar($totalschools, $page, $perpage, $url);
-        $baseurl = new moodle_url('/local/mentor/download/download_schoolinfo.php', $allparams);
-        $out .= html_writer::tag('div', $this->download_buttons($baseurl), array('class' => 'text-white mt-3 mb-3'));
+
         return $out;
     }
 
@@ -215,7 +216,7 @@ class local_mentor_renderer extends plugin_renderer_base {
         $out .= html_writer::tag('div', $outdynamic, array('class' => 'modal-body'));
         $out .= html_writer::start_tag('div', array('class' => 'modal-footer'));
         $out .= html_writer::start_tag('div', array('class' => 'download-link', 'style' => "display: none;"));
-        $out .= '<form method="get" action="" class="dataformatselector m-1">
+        $out .= '<form id="my_form" method="get" action="" class="dataformatselector m-1">
                  <div class="form-inline text-xs-right">
 		 <input type="hidden" name="dataformat" value="csv">
 		 <input type="hidden" name="reportid" id="reportid" value="">
@@ -373,6 +374,8 @@ public function mentor_session_report_display($availablementors, $totalmentors, 
     public function mentor_schools_display($mentors, $totalmentor, $page, $perpage, $allparams) {
         global $DB, $CFG, $OUTPUT;
         $out = '';
+        $baseurl = new moodle_url('/local/mentor/download/download_metorschoolinfo.php', $allparams);
+        $out .= html_writer::tag('div', $this->download_buttons($baseurl), array('class' => 'form-group col-xs-6'));
         $out .= html_writer::tag('p', get_string('noofparticipantscount', 'local_mentor', $totalmentor), array('class' => 'text-black text-right mb-2'));
         if ($totalmentor == 0) {
             return html_writer::div(get_string('nothingtodisplay', 'local_mentor'), 'alert alert-info mt-3');
@@ -415,8 +418,7 @@ public function mentor_session_report_display($availablementors, $totalmentors, 
         $out .= html_writer::end_tag('div');
         $url = new moodle_url('/local/mentor/mentorinfo.php', array('page' => $page));
         $out .= $OUTPUT->paging_bar($totalmentor, $page, $perpage, $url);
-        $baseurl = new moodle_url('/local/mentor/download/download_metorschoolinfo.php', $allparams);
-        $out .= html_writer::tag('div', $this->download_buttons($baseurl), array('class' => 'text-white mt-3 mb-3'));
+
         return $out;
     }
     /*
@@ -443,13 +445,15 @@ public function mentor_history_display($availablementors, $totalmentors, $page, 
         global $DB, $CFG, $OUTPUT;
         require_once( '../../mentor/lib.php');
         $out = '';
+        $baseurl = new moodle_url('/local/mentor/download/download_mentorhistory.php', $allparams);            
+        $out .= html_writer::tag('div', $this->download_buttons($baseurl), array('class' => 'form-group col-xs-6'));
         $out .= html_writer::tag('p', get_string('noofparticipantscount', 'local_mentor', $totalmentors), array('class' => 'text-black text-right mb-2'));
         if ($totalmentors == 0) {
             return html_writer::div(get_string('nothingtodisplay', 'local_mentor'), 'alert alert-info mt-3');
         }
         $table = new html_table();
         $table->head = array(get_string('fullname', 'local_mentor'), get_string('email'), get_string('noofschool', 'local_mentor'),
-                         get_string('noofsession', 'local_mentor'), get_string('mentoringhours', 'local_mentor'));
+                         get_string('noofsession', 'local_mentor'), get_string('mentoringhours', 'local_mentor'),get_string('last_active', 'local_mentor'));
         $table->attributes = array('class' => 'table');
         foreach ($availablementors as $mentor) {
             $sql = "SELECT count(totaltime) as noofsession, count(DISTINCT(schoolid)) as noofschool, SUM(totaltime) as mentoringhours "
@@ -464,6 +468,7 @@ public function mentor_history_display($availablementors, $totalmentors, $page, 
             $data[] = count($schoollist);
             $data[] = $schoolinfo->noofsession;
             $data[] = $schoolinfo->mentoringhours ? $schoolinfo->mentoringhours: 0;
+            $data[] = ($mentor->lastaccess == 0)?get_string('never','local_mentor'):date('d-M-Y H:i:s',$mentor->lastaccess);
             $table->data[] = $data;
         }
         $out .= html_writer::start_tag('div', array('class' => 'db-program-progress no-overflow p-3'));
@@ -471,8 +476,7 @@ public function mentor_history_display($availablementors, $totalmentors, $page, 
         $out .= html_writer::end_tag('div');
         $url = new moodle_url('/local/mentor/mentor_history.php', array('page' => $page));
         $out .= $OUTPUT->paging_bar($totalmentors, $page, $perpage, $url);
-        $baseurl = new moodle_url('/local/mentor/download/download_mentorhistory.php', $allparams);            
-        $out .= html_writer::tag('div', $this->download_buttons($baseurl), array('class' => 'text-white mt-3 mb-3'));
+       
         return $out;
     }
     function mentor_history_filter() {
@@ -499,7 +503,7 @@ public function mentor_history_display($availablementors, $totalmentors, $page, 
         global $DB, $CFG, $OUTPUT;
         $out = '';
         $baseurl = new moodle_url('/local/mentor/download/download_schooldatabase.php', $allparams);
-        $out .= html_writer::tag('div', $this->download_buttons($baseurl), array('class' => 'text-white mt-3 mb-3'));
+        $out .= html_writer::tag('div', $this->download_buttons($baseurl), array('class' => 'form-group col-xs-6'));
         $out .= html_writer::tag('p', get_string('noofschools', 'local_mentor', $totalschools), array('class' => 'text-black text-right mb-2'));
     if ($totalschools == 0) {
       return html_writer::div(get_string('nothingtodisplay', 'local_mentor'), 'alert alert-info mt-3');
@@ -519,6 +523,8 @@ public function mentor_history_display($availablementors, $totalmentors, $page, 
             $data = [];
             $schoollink = new moodle_url('/atalfeatures/schooldetail.php', array('id'=>$school->id));
             $schoollinkhtml = html_writer::link($schoollink, $school->name, array("target"=>"_blank"));
+            $number_of_students = 0;
+            $number_of_sessions = 0;
             $data[] = $schoollinkhtml;
             $mentordata = $DB->get_records_sql("SELECT mus.id,mu.id as userid,mu.firstname FROM {user_school} mus JOIN {user} mu on mu.id=mus.userid WHERE mus.schoolid=$school->id and role='mentor'");
             $mentorhtml = '';

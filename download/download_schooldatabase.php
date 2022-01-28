@@ -70,7 +70,7 @@ if ($format) {
     $iterator = $user->getIterator();
 
     $countrecord = 0;
-    \core\dataformat::download_data($filename, $format, $headers, $iterator, function ($school) {
+    download_as_dataformat($filename, $format, $headers, $iterator, function ($school) {
         global $DB;
         $data = [];
         $data[] = $school->name;

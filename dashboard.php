@@ -29,11 +29,13 @@ $userrole = get_atalrolenamebyid($USER->msn);
 
 $monthid = optional_param('month', 0, PARAM_INT);
 $yearid = optional_param('year', 1, PARAM_INT);
+$stateid = optional_param('state', 0, PARAM_INT);
+
 $PAGE->set_url('/local/mentor/dashboard.php');
 
 //Heading
 $PAGE->set_context(context_user::instance($USER->id));
-$PAGE->set_pagelayout('standard');
+$PAGE->set_pagelayout('mydashboard');
 $strmessages = "Dashboard";
 $PAGE->set_title("{$SITE->shortname}: $strmessages");
 $PAGE->set_heading("Dashboard");
@@ -171,26 +173,33 @@ $year_select = array('Select Year');
 $years = array_combine(range(date('Y'), 2018), range(date('Y'), 2018));
 $years = array_merge($year_select, $years);
 $months = array('Select Months', 'January', 'February', 'March', 'April', 'June', 'May', 'July', 'August', 'September', 'October', 'November', 'December');
-echo $OUTPUT->single_select(new moodle_url('', array('year' => $yearid)), 'month', $months, $monthid, '', array(), array('label' => 'Select Month'));
-echo $OUTPUT->single_select(new moodle_url('', array('month' => $monthid)), 'year', $years, $yearid, '', array(), array('label' => 'Select Year'));
+$sql = "select s.id, s.name as statename from {state} as s";
+$allavailablestates = $DB->get_records_sql($sql);
+$states = array('Select State');
+foreach ($allavailablestates as &$allavailablestates) {
+  $states[$allavailablestates->id] = $allavailablestates->statename;
+}
+echo $OUTPUT->single_select(new moodle_url('', array('year' => $yearid,'state' => $stateid)), 'month', $months, $monthid, '', array(), array('label' => 'Select Month'));
+echo $OUTPUT->single_select(new moodle_url('', array('month' => $monthid,'state' => $stateid)), 'year', $years, $yearid, '', array(), array('label' => 'Select Year'));
+echo $OUTPUT->single_select(new moodle_url('', array('year' => $yearid,'month' => $monthid)), 'state', $states, $stateid, '', array(), array('label' => 'Select State'));
 echo reset_filter();
 if (!empty($yearid) && !empty($monthid)) {
   $year = $years[$yearid];
-  $result = session_hours_months($year, $monthid);
+  $result = session_hours_months($year, $monthid,$stateid);
   $session_value = array($result['mentoring_sessions']);
   $hours_value = array($result['totaltime']);
   $labels_value = array($months[$monthid]);
 }
 elseif (!empty($yearid) && empty($monthid)) {
   $year = $years[$yearid];
-  $result = session_year($year);
+  $result = session_year($year,$stateid);
   for ($i = 0; $i < 12; $i++) {
     $session_value[$i] = isset($result['mentoring_sessions'][$i + 1]) ? $result['mentoring_sessions'][$i + 1] : 0;
     $hours_value[$i] = isset($result['totaltime_all'][$i + 1]) ? $result['totaltime_all'][$i + 1] : 0;
   }
 }
 elseif (!empty($monthid) && empty($yearid)) {
-  $result = session_month($monthid);
+  $result = session_month($monthid,$stateid);
   $session_value = array();
   $hours_value = array();
   $inc = 0;
@@ -234,13 +243,19 @@ function reset_filter() {
   echo $output;
 }
 
-function session_hours_months($year, $monthid) {
+function session_hours_months($year, $monthid, $stateid) {
   global $DB;
 //  $sql = "SELECT id, from_unixtime(dateofsession,'%m') as month FROM `mdl_mentor_sessionrpt` where "
 //      . "from_unixtime(dateofsession,'%m') = $monthid AND from_unixtime(dateofsession,'%Y') = $yearid";
 
-  $sql = "SELECT count(id) as count, SUM(totaltime) as totaltime FROM {mentor_sessionrpt} where"
-      . " from_unixtime(dateofsession,'%m') = $monthid AND from_unixtime(dateofsession,'%Y') = $year";
+ if($stateid == 0){
+  $sql = "SELECT count(ms.id) as count, SUM(ms.totaltime) as totaltime FROM {mentor_sessionrpt} as ms where"
+      . " from_unixtime(ms.dateofsession,'%m') = $monthid AND from_unixtime(ms.dateofsession,'%Y') = $year";
+ }else{
+     $sql = "SELECT count(ms.id) as count, SUM(ms.totaltime) as totaltime FROM {mentor_sessionrpt} as ms "
+         . "left join {user} as u on u.id = ms.mentorid left join {state} as s on s.id=u.aim where"
+      . " from_unixtime(ms.dateofsession,'%m') = $monthid and s.id = $stateid AND from_unixtime(ms.dateofsession,'%Y') = $year";
+ }
   $sessions = $DB->get_records_sql($sql);
   $result = array('totaltime' => 0, 'mentoring_sessions' => 0);
   foreach ($sessions as &$sessions) {
@@ -250,10 +265,17 @@ function session_hours_months($year, $monthid) {
   return $result;
 }
 
-function session_year($year) {
+function session_year($year, $stateid) {
   global $DB;
-  $sql = "SELECT id,count(id) as count, SUM(totaltime) as totaltime, from_unixtime(dateofsession,'%m') as month
-    FROM {mentor_sessionrpt} where from_unixtime(dateofsession,'%Y') = $year group by month order by month ASC";
+  if($stateid == 0){
+  $sql = "SELECT ms.id,count(ms.id) as count, SUM(ms.totaltime) as totaltime, from_unixtime(ms.dateofsession,'%m') as month
+    FROM {mentor_sessionrpt} as ms where from_unixtime(ms.dateofsession,'%Y') = $year group by month order by month ASC";
+  }else{
+  $sql = "SELECT ms.id,count(ms.id) as count, SUM(ms.totaltime) as totaltime, from_unixtime(ms.dateofsession,'%m') as month
+    FROM {mentor_sessionrpt} as ms left join {user} as u on u.id = ms.mentorid left join {state} as s on s.id=u.aim where from_unixtime(ms.dateofsession,'%Y') = $year "
+      . "and s.id = $stateid group by month order by month ASC";
+  }
+  
   $sessions = $DB->get_records_sql($sql);
   $result = array();
   $sessions_array = array();
@@ -269,10 +291,16 @@ function session_year($year) {
   return $result;
 }
 
-function session_month($month) {
+function session_month($month, $stateid) {
   global $DB;
-  $sql = "SELECT count(id) as count, SUM(totaltime) as totaltime, from_unixtime(dateofsession,'%Y') as y "
-      . "FROM {mentor_sessionrpt} where from_unixtime(dateofsession,'%m') = $month group by y order by y ASC";
+  if($stateid == 0){
+  $sql = "SELECT count(ms.id) as count, SUM(ms.totaltime) as totaltime, from_unixtime(ms.dateofsession,'%Y') as y "
+      . "FROM {mentor_sessionrpt} as ms where from_unixtime(ms.dateofsession,'%m') = $month group by y order by y ASC";
+  }else{
+      $sql = "SELECT count(ms.id) as count, SUM(ms.totaltime) as totaltime, from_unixtime(ms.dateofsession,'%Y') as y "
+      . "FROM {mentor_sessionrpt} as ms left join {user} as u on u.id = ms.mentorid left join {state} as s on s.id=u.aim "
+          . "where from_unixtime(ms.dateofsession,'%m') = $month and s.id = $stateid group by y order by y ASC";
+  }
   $sessions = $DB->get_records_sql($sql);
   $result = array();
   $sessions_array = array();

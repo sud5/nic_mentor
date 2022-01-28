@@ -70,7 +70,7 @@ define(['jquery', 'jqueryui', 'core/ajax', 'core/str', 'core/form-autocomplete',
                     $('#basicModal').modal({show: true});
                     $("#myModalLabel").html("<h4>" + title + "</h4>");
                     var dwnload = $(this).attr('schoollink');
-                    $('form').attr('action', dwnload);
+                    $('#my_form').attr('action', dwnload);
                     var mid = $(this).attr('mentorid');
                     $('#reportid').val(mid);
                     $('.download-link').attr('style', 'none');

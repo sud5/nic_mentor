@@ -30,7 +30,7 @@ if ($format) {
         . " left join {user_info_data} ud on ud.userid=u.id left join (select * from {event} where eventtype='user' and parentid!=0 ) me on (u.id=me.userid or u.id=me.parentid) "
         . "WHERE msn=4 and deleted=0 and ud.data='mentor data' $where group by u.id order by u.id ASC";
     $availablementors = $DB->get_records_sql($fields . $sql, array());
-    $name = "mentors_history";
+    $name = "mentors_database";
     $allmentors = $availablementors;
     $filename = clean_filename($name);
     $user = new ArrayObject($allmentors);
@@ -51,6 +51,7 @@ if ($format) {
         $data[] = count($schoollist);
         $data[] = $schoolinfo->noofsession;
         $data[] = $schoolinfo->mentoringhours ? $schoolinfo->mentoringhours : 0;
+        $data[] = ($mentor->lastaccess == 0)?get_string('never','local_mentor'):date('d-M-Y H:i:s',$mentor->lastaccess);
         return $data;
     });
     exit;

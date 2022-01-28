@@ -2,7 +2,7 @@
 
 require_once '../../config.php';
 require_once 'lib.php';
-
+require_login();
 $page = optional_param('page', 0, PARAM_INT);
 $perpage = optional_param('perpage', 20, PARAM_INT);
 global $DB;
