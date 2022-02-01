@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -14,16 +15,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * @package   local_mentor
- * @copyright 2020, You Name 2pisolutions.com
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2020121900.09;
-$plugin->requires = 2019052000;
-$plugin->release = '3.10';   // Available as of Moodle 3.9.0 or later.
-$plugin->component = 'local_mentor';
-$plugin->maturity = MATURITY_STABLE; 
+function xmldb_local_mentor_upgrade($oldversion) {
+  global $CFG, $DB;
+
+  $result = true;
+  $dbman = $DB->get_manager();
+
+   if ($oldversion < 2020121900.09) {
+
+    $table = new xmldb_table('tech_ticket');
+    $field = new xmldb_field('priority', XMLDB_TYPE_INTEGER, '20', null, XMLDB_NOTNULL, null, 1);
+        
+    if (!$dbman->field_exists($table, $field)) {
+      $dbman->add_field($table, $field);
+    }
+
+    upgrade_plugin_savepoint(true, 2020121900.09, 'local', 'mentor');
+  }
+
+  return $result;
+}
