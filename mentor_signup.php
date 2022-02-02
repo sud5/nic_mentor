@@ -47,103 +47,7 @@ $PAGE->set_pagelayout('mentor_register');
 
 echo $OUTPUT->header();
 ?>
-<script>
 
-//   document.getElementById('general').style.display = 'block'
-// document.getElementById('personal').style.display = 'none'
-// document.getElementById('education').style.display = 'none'
-// document.getElementById('mentors').style.display = 'none'
-// document.getElementById('referee').style.display = 'none'
-// document.getElementById('personality').style.display = 'none'
-
-// function changeDiv(params) {
-//   if(params == '1'){
-//     document.getElementById('general').style.display = 'block'
-//     document.getElementById('personal').style.display = 'none'
-//     document.getElementById('education').style.display = 'none'
-//     document.getElementById('mentors').style.display = 'none'
-//     document.getElementById('referee').style.display = 'none'
-//     document.getElementById('personality').style.display = 'none'
-//     document.getElementById('btn1').className = 'filter-active'
-//     document.getElementById('btn2').className = 'filter'
-//     document.getElementById('btn3').className = 'filter'
-//     document.getElementById('btn4').className = 'filter'
-//     document.getElementById('btn5').className = 'filter'
-//     document.getElementById('btn6').className = 'filter'
-//   }
-//   if(params == '2'){
-//     document.getElementById('general').style.display = 'none'
-//     document.getElementById('personal').style.display = 'block'
-//     document.getElementById('education').style.display = 'none'
-//     document.getElementById('mentors').style.display = 'none'
-//     document.getElementById('referee').style.display = 'none'
-//     document.getElementById('personality').style.display = 'none'
-//     document.getElementById('btn1').className = 'filter'
-//     document.getElementById('btn2').className = 'filter-active'
-//     document.getElementById('btn3').className = 'filter'
-//     document.getElementById('btn4').className = 'filter'
-//     document.getElementById('btn5').className = 'filter'
-//     document.getElementById('btn6').className = 'filter'
-//   }
-//   if(params == '3'){
-//     document.getElementById('general').style.display = 'none'
-//     document.getElementById('personal').style.display = 'none'
-//     document.getElementById('education').style.display = 'block'
-//     document.getElementById('mentors').style.display = 'none'
-//     document.getElementById('referee').style.display = 'none'
-//     document.getElementById('personality').style.display = 'none'
-//     document.getElementById('btn1').className = 'filter'
-//     document.getElementById('btn2').className = 'filter'
-//     document.getElementById('btn3').className = 'filter-active'
-//     document.getElementById('btn4').className = 'filter'
-//     document.getElementById('btn5').className = 'filter'
-//     document.getElementById('btn6').className = 'filter'
-//   }
-//   if(params == '4'){
-//     document.getElementById('general').style.display = 'none'
-//     document.getElementById('personal').style.display = 'none'
-//     document.getElementById('education').style.display = 'none'
-//     document.getElementById('mentors').style.display = 'block'
-//     document.getElementById('referee').style.display = 'none'
-//     document.getElementById('personality').style.display = 'none'
-//     document.getElementById('btn1').className = 'filter'
-//     document.getElementById('btn2').className = 'filter'
-//     document.getElementById('btn3').className = 'filter'
-//     document.getElementById('btn4').className = 'filter-active'
-//     document.getElementById('btn5').className = 'filter'
-//     document.getElementById('btn6').className = 'filter'
-//   }
-//   if(params == '5'){
-//     document.getElementById('general').style.display = 'none'
-//     document.getElementById('personal').style.display = 'none'
-//     document.getElementById('education').style.display = 'none'
-//     document.getElementById('mentors').style.display = 'none'
-//     document.getElementById('referee').style.display = 'block'
-//     document.getElementById('personality').style.display = 'none'
-//     document.getElementById('btn1').className = 'filter'
-//     document.getElementById('btn2').className = 'filter'
-//     document.getElementById('btn3').className = 'filter'
-//     document.getElementById('btn4').className = 'filter'
-//     document.getElementById('btn5').className = 'filter-active'
-//     document.getElementById('btn6').className = 'filter'
-//   }
-//   if(params == '6'){
-//     document.getElementById('general').style.display = 'none'
-//     document.getElementById('personal').style.display = 'none'
-//     document.getElementById('education').style.display = 'none'
-//     document.getElementById('mentors').style.display = 'none'
-//     document.getElementById('referee').style.display = 'none'
-//     document.getElementById('personality').style.display = 'block'
-//     document.getElementById('btn1').className = 'filter'
-//     document.getElementById('btn2').className = 'filter'
-//     document.getElementById('btn3').className = 'filter'
-//     document.getElementById('btn4').className = 'filter'
-//     document.getElementById('btn5').className = 'filter'
-//     document.getElementById('btn6').className = 'filter-active'
-//   }
-  
-// }
-</script>
 <section id="register" class="portfolio">
 <!DOCTYPE html>
 <html lang="en">
@@ -271,20 +175,22 @@ echo $OUTPUT->header();
         <div class="row" data-aos="fade-up" data-aos-delay="100">
           <div class="col-lg-12 d-flex justify-content-center">
             <ul id="portfolio-flters">
-              <li id="btn1"  class="filter-active">General</li>
-              <li id="btn2" >Personal</li>
-              <li id="btn3" >Education</li>
-              <li id="btn4" >Experience</li>
-              <li id="btn4" >Referee</li>
-              <li id="btn4" >Intent</li>
+              <li id="btn1" class="step">General</li>
+              <li id="btn2" class="step" >Personal</li>
+              <li id="btn3" class="step">Education</li>
+              <li id="btn4" class="step">Experience</li>
+              <li id="btn4" class="step">Referee</li>
+              <li id="btn4" class="step">Intent</li>
             </ul>
           </div>
         </div>
 
-        <div class="row" data-aos="fade-up" data-aos-delay="200">          
+        <div class="row" data-aos="fade-up" data-aos-delay="200">  
+
+        <form action="mentorsignupprocess.php" method="post" role="form" class="php-email-form" id="regForm">        
           <div class="col-lg-12 tab" id="general">
 
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+            
               
               <div class="row">
                 <div class="col-md-6 form-group mt-3 mt-md-0">
@@ -338,234 +244,218 @@ echo $OUTPUT->header();
                   <input type='file' class="form-control" required oninput="this.className = ''">
                 </div>
               </div>
-              <div class="text-center">
-                <button type="button" class="form-button btn" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
-                <button class="form-button btn" type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
-                
-            </form>
+              
 
           </div>
+        
 
-<!-- ===============================General============================ -->
+<!--============================End of General fields============================-->
           <div class="col-lg-12 tab" id="personal">
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">                          
-
+            
               <div class="row mt-3">
                 <div class="col-md-12 form-group">
-                  <select class="form-control">
-                    <option disabled selected>Select your Nationality</option>
-                    <option>Indian</option>
-                    <option>Other</option>
+                  <select name="nationality" class="form-control">
+                    <option value="" selected>Select your Nationality</option>
+                    <option value="indian">Indian</option>
+                    <option value="other">Other</option>
                   </select>
                 </div>
               </div> 
 
               <div class="row mt-3">
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="State" required oninput="this.className = ''">
+                  <input type="email" class="form-control" name="state" id="state" placeholder="State" required oninput="this.className = ''">
                 </div>
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="District" required oninput="this.className = ''">
+                  <input type="district" class="form-control" name="district" id="district" placeholder="District" required oninput="this.className = ''">
                 </div>
               </div>
               
               <div class="row mt-3">
                 <div class="form-group">
-                  <textarea class="form-control" name="message" rows="3" placeholder="Address 1" required oninput="this.className = ''"></textarea>
+                  <textarea class="form-control" name="address1" rows="3" placeholder="Address 1" required oninput="this.className = ''"></textarea>
                 </div> 
               </div>
               
               <div class="row mt-3">
                 <div class="form-group">
-                  <textarea class="form-control" name="message" rows="3" placeholder="Address 2" required oninput="this.className = ''"></textarea>
+                  <textarea class="form-control" name="address2" rows="3" placeholder="Address 2" required oninput="this.className = ''"></textarea>
                 </div> 
               </div>
 
               <div class="row mt-3">
                 <div class="col-md-12 form-group mt-3 mt-md-0">
-                  <input type="text" class="form-control" name="email" id="email" placeholder="Pincode" required oninput="this.className = ''">
+                  <input type="text" class="form-control" name="pincode" id="pincode" placeholder="Pincode" required oninput="this.className = ''">
                 </div>
               </div>
 
               <div class="row mt-3">
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="text" class="form-control" name="email" id="email" placeholder="LinkedIn profile URL" required oninput="this.className = ''">
+                  <input type="text" class="form-control" name="linkedinurl" id="linkedinid" placeholder="LinkedIn profile URL" required oninput="this.className = ''">
                 </div>
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="text" class="form-control" name="email" id="email" placeholder="Webpage/Blogpost URL" required oninput="this.className = ''">
+                  <input type="text" class="form-control" name="blogposturl" id="blogposturl" placeholder="Webpage/Blogpost URL" required oninput="this.className = ''">
                 </div>
               </div>
-              <div class="text-center"><button class="form-button btn" type="submit">Send Message</button></div>
-            </form>
+             
           </div>
 
           <div class="col-lg-12 tab" id="education">
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">                                        
+                                              
 
               <div class="row mt-3">
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Highest Awarded Degree" required>
+                  <input type="text" class="form-control" name="highestdegree" id="highestdegree" placeholder="Highest Awarded Degree" required>
                 </div>
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Area of Specialisation" required>
+                  <input type="text" class="form-control" name="specilization" id="specilization" placeholder="Area of Specialisation" required>
                 </div>
               </div>
               
               <div class="row mt-3">
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Educational Institute of Highest Awarded Degree" required>
+                  <input type="text" class="form-control" name="institute" id="institute" placeholder="Educational Institute of Highest Awarded Degree" required>
                 </div>
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Year of completion of Highest Awarded Degree" required>
+                  <input type="text" class="form-control" name="yearofcompletion" id="yearofcompletion" placeholder="Year of completion of Highest Awarded Degree" required>
                 </div>
               </div>                          
 
               <div class="row mt-3">
                 <div class="col-md-12 form-group mt-3 mt-md-0">
-                  <input type="text" class="form-control" name="email" id="email" placeholder="Languages conversant in" required>
+                  <input type="text" class="form-control" name="languages" id="languages" placeholder="Languages conversant in" required>
                 </div>
               </div>
-              <div class="text-center"><button class="form-button btn" type="submit">Send Message</button></div>
-            </form>
+              
           </div>
 
           <div class="col-lg-12 tab" id="mentors">
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">                                        
+                                                
 
               <div class="row mt-3">
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="You are registering as" required>
+                  <input type="text" class="form-control" name="registeringas" id="registeringas" placeholder="You are registering as" required>
                 </div>
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Are you employed by any of the AIM partners?" required>
-                </div>
-              </div>
-              
-              <div class="row mt-3">
-                <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Name of Current Organization" required>
-                </div>
-                <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Type of Organization" required>
+                  <input type="text" class="form-control" name="aimpartneremployed" id="aimpartneremployed" placeholder="Are you employed by any of the AIM partners?" required>
                 </div>
               </div>
               
               <div class="row mt-3">
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Designation with the Current Organization" required>
+                  <input type="text" class="form-control" name="currentorgname" id="currentorgname" placeholder="Name of Current Organization" required>
                 </div>
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Current Area of Work" required>
-                </div>
-              </div>
-              
-              <div class="row mt-3">
-                <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Work Experience with Current Organization" required>
-                </div>
-                <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Total Work Experience" required>
+                  <input type="text" class="form-control" name="typeoforg" id="typeoforg" placeholder="Type of Organization" required>
                 </div>
               </div>
               
               <div class="row mt-3">
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Do you have any mentoring experience?" required>
+                  <input type="text" class="form-control" name="designation" id="designation" placeholder="Designation with the Current Organization" required>
                 </div>
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Which form of mentoring would you prefer?" required>
+                  <input type="text" class="form-control" name="currentwork" id="currentwork" placeholder="Current Area of Work" required>
                 </div>
               </div>
               
               <div class="row mt-3">
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="How many hours are you ready to commit per week?" required>
+                  <input type="text" class="form-control" name="currentworkexperience" id="currentworkexperience" placeholder="Work Experience with Current Organization" required>
                 </div>
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Please select 4 preferred ATLs to mentor" required>
+                  <input type="text" class="form-control" name="totalexperience" id="totalexperience" placeholder="Total Work Experience" required>
+                </div>
+              </div>
+              
+              <div class="row mt-3">
+                <div class="col-md-6 form-group mt-3 mt-md-0">
+                  <input type="text" class="form-control" name="mentoringexperience" id="mentoringexperience" placeholder="Do you have any mentoring experience?" required>
+                </div>
+                <div class="col-md-6 form-group mt-3 mt-md-0">
+                  <input type="text" class="form-control" name="preferredmentoringform" id="preferredmentoringform" placeholder="Which form of mentoring would you prefer?" required>
+                </div>
+              </div>
+              
+              <div class="row mt-3">
+                <div class="col-md-6 form-group mt-3 mt-md-0">
+                  <input type="text" class="form-control" name="noofhourstowork" id="noofhourstowork" placeholder="How many hours are you ready to commit per week?" required>
+                </div>
+                <div class="col-md-6 form-group mt-3 mt-md-0">
+                  <input type="text" class="form-control" name="preferredatls" id="preferredatls" placeholder="Please select 4 preferred ATLs to mentor" required>
                 </div>
               </div>                            
 
               <div class="row mt-3">
                 <div class="col-md-12 form-group mt-3 mt-md-0">
-                  <input type="text" class="form-control" name="email" id="email" placeholder="Why do you want to be a Mentor of Change and how will your experience position you to be an effective mentor?" required>
+                  <input type="text" class="form-control" name="reasonformentorofchange" id="reasonformentorofchange" placeholder="Why do you want to be a Mentor of Change and how will your experience position you to be an effective mentor?" required>
                 </div>
               </div>
-
-
-
-              <div class="text-center"><button class="form-button btn" type="submit">Send Message</button></div>
-            </form>
           </div>
+<!--End of mentors section-->
 
           <div class="col-lg-12 tab" id="referee">
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">                                        
-
+           
               <div class="row mt-3">
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Referee 1 Name" required>
+                  <input type="text" class="form-control" name="referee1name" id="referee1name" placeholder="Referee 1 Name" required>
                 </div>
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Referee 1 Email" required>
+                  <input type="text" class="form-control" name="referee1email" id="referee1email" placeholder="Referee 1 Email" required>
                 </div>
               </div>
               
               <div class="row mt-3">
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Referee 1 Phone Number" required>
+                  <input type="text" class="form-control" name="referee1phone" id="referee1phone" placeholder="Referee 1 Phone Number" required>
                 </div>
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="How do you know them?" required>
+                  <input type="text" class="form-control" name="referee1connection" id="referee1connection" placeholder="How do you know them?" required>
                 </div>
               </div>                                                        
 
               <div class="row mt-3">
                 <div class="col-md-12 form-group mt-3 mt-md-0">
-                  <select class="form-control">
-                    <option disabled selected>Is the referee an existing Mentor of Change?</option>
-                    <option>Yes</option>
-                    <option>No</option>
+                  <select name="referee1existingmentor" class="form-control">
+                    <option value='' selected>Is the referee an existing Mentor of Change?</option>
+                    <option value='yes'>Yes</option>
+                    <option value='no'>No</option>
                   </select>
                 </div>
               </div>
               
               <div class="row mt-3">
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Referee 2 Name" required>
+                  <input type="text" class="form-control" name="referee2name" id="referee2name" placeholder="Referee 2 Name" required>
                 </div>
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Referee 2 Email" required>
+                  <input type="text" class="form-control" name="referee2email" id="referee2email" placeholder="Referee 2 Email" required>
                 </div>
               </div>
               
               <div class="row mt-3">
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Referee 2 Phone Number" required>
+                  <input type="text" class="form-control" name="referee2phone" id="referee2phone" placeholder="Referee 2 Phone Number" required>
                 </div>
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="How do you know them?" required>
+                  <input type="text" class="form-control" name="referee2connection" id="referee2connection" placeholder="How do you know them?" required>
                 </div>
               </div>                                                        
 
               <div class="row mt-3">
                 <div class="col-md-12 form-group mt-3 mt-md-0">
-                  <select class="form-control">
-                    <option disabled selected>Is the referee 2 an existing Mentor of Change?</option>
-                    <option>Yes</option>
-                    <option>No</option>
+                  <select name="referee2existingmentor" class="form-control">
+                    <option value='' selected>Is the referee 2 an existing Mentor of Change?</option>
+                    <option value='yes'>Yes</option>
+                    <option value='no'>No</option>
                   </select>
                 </div>
               </div>
-
-
-
-              <div class="text-center"><button class="form-button btn" type="submit">Send Message</button></div>
-            </form>
           </div>
+<!--end of referee section-->
 
           <div class="col-lg-12 tab" id="personality">
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">                                        
-
+            
               <div class="row mt-3">
                 <div class="col-md-12 form-group mt-3 mt-md-0">
                   <div class="table-responsive">
@@ -580,83 +470,83 @@ echo $OUTPUT->header();
                       </tr>
                       <tr>
                         <td>I’m willing to put in a great deal of effort to excel in my professional life</th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
+                        <td><input type="radio" value="1" name="willingtoputeffort"></th>
+                        <td><input type="radio" value="2" name="willingtoputeffort"></th>
+                        <td><input type="radio" value="3" name="willingtoputeffort"></th>
+                        <td><input type="radio" value="4" name="willingtoputeffort"></th>
+                        <td><input type="radio" value="5" name="willingtoputeffort"></th>
                       </tr>
                       <tr>
                         <td>Based on my work experience so far, I believe that I can constructively guide and nurture young minds</th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
+                        <td><input type="radio" value="1" name="guideyoungminds"></th>
+                        <td><input type="radio" value="2" name="guideyoungminds"></th>
+                        <td><input type="radio" value="3" name="guideyoungminds"></th>
+                        <td><input type="radio" value="4" name="guideyoungminds"></th>
+                        <td><input type="radio" value="5" name="guideyoungminds"></th>
                       </tr>
                       <tr>
                         <td>When in meeting and group discussions, I consciously make an effort to listen to others</th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
+                        <td><input type="radio" value="1" name="listentoothers"></th>
+                        <td><input type="radio" value="2" name="listentoothers"></th>
+                        <td><input type="radio" value="3" name="listentoothers"></th>
+                        <td><input type="radio" value="4" name="listentoothers"></th>
+                        <td><input type="radio" value="5" name="listentoothers"></th>
                       </tr>
                       <tr>
                         <td>In my offline and work environment I am known as someone who goes out of their way to meet my goals</th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
+                        <td><input type="radio" value="1" name="goesoutofway"></th>
+                        <td><input type="radio" value="2" name="goesoutofway"></th>
+                        <td><input type="radio" value="3" name="goesoutofway"></th>
+                        <td><input type="radio" value="4" name="goesoutofway"></th>
+                        <td><input type="radio" value="5" name="goesoutofway"></th>
                       </tr>
                       <tr>
                         <td>I have experience guiding and mentoring people younger than me</th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
+                        <td><input type="radio" value="1" name="guidingexperiencesamebg"></th>
+                        <td><input type="radio" value="2" name="guidingexperiencesamebg"></th>
+                        <td><input type="radio" value="3" name="guidingexperiencesamebg"></th>
+                        <td><input type="radio" value="4" name="guidingexperiencesamebg"></th>
+                        <td><input type="radio" value="5" name="guidingexperiencesamebg"></th>
                       </tr>
                       <tr>
                         <td>I have experience guiding and mentoring people who are from different backgrounds than me</th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
+                        <td><input type="radio" value="1" name="guidingexperienceotherbg"></th>
+                        <td><input type="radio" value="2" name="guidingexperienceotherbg"></th>
+                        <td><input type="radio" value="3" name="guidingexperienceotherbg"></th>
+                        <td><input type="radio" value="4" name="guidingexperienceotherbg"></th>
+                        <td><input type="radio" value="5" name="guidingexperienceotherbg"></th>
                       </tr>
                       <tr>
                         <td>I feel confident in my ability to coordinate with multiple stakeholders</th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
+                        <td><input type="radio" value="1" name="confidenttocordinate"></th>
+                        <td><input type="radio" value="2" name="confidenttocordinate"></th>
+                        <td><input type="radio" value="3" name="confidenttocordinate"></th>
+                        <td><input type="radio" value="4" name="confidenttocordinate"></th>
+                        <td><input type="radio" value="5" name="confidenttocordinate"></th>
                       </tr>
                       <tr>
                         <td>I feel confident in my ability to find solutions to problems I face or get the support I need</th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
+                        <td><input type="radio" value="1" name="confidenttofindsolution"></th>
+                        <td><input type="radio" value="2" name="confidenttofindsolution"></th>
+                        <td><input type="radio" value="3" name="confidenttofindsolution"></th>
+                        <td><input type="radio" value="4" name="confidenttofindsolution"></th>
+                        <td><input type="radio" value="5" name="confidenttofindsolution"></th>
                       </tr>
                       <tr>
                         <td>If my mentee does not understand what I’m trying to communicate I will make deliberate attempts to figure out new ways of communicating with them</th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
+                        <td><input type="radio" value="1" name="findnewwaystocommunicate"></th>
+                        <td><input type="radio" value="2" name="findnewwaystocommunicate"></th>
+                        <td><input type="radio" value="3" name="findnewwaystocommunicate"></th>
+                        <td><input type="radio" value="4" name="findnewwaystocommunicate"></th>
+                        <td><input type="radio" value="5" name="findnewwaystocommunicate"></th>
                       </tr>
                       <tr>
                         <td>I feel comfortable in coordinating with multiple stakeholders like school admin, teachers, parents and students</th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
-                        <td><input type="radio" name="first"></th>
+                        <td><input type="radio" value="1" name="comfortabletocordinate"></th>
+                        <td><input type="radio" value="2" name="comfortabletocordinate"></th>
+                        <td><input type="radio" value="3" name="comfortabletocordinate"></th>
+                        <td><input type="radio" value="4" name="comfortabletocordinate"></th>
+                        <td><input type="radio" value="5" name="comfortabletocordinate"></th>
                       </tr>
                       
                     </table>
@@ -664,15 +554,20 @@ echo $OUTPUT->header();
                 </div>                
               </div>                            
 
-              <div class="text-center"><button class="form-button btn" type="submit">Send Message</button></div>
-            </form>
+              
           </div>
 
-          
-
+          <div class="text-center">
+                <button type="button" class="form-button btn" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                <button class="form-button btn" type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
+          </div> 
+            
+        </form>
         </div>
 
       </div>
+
+     
     </section><!-- End Portfolio Section -->
 
     
@@ -741,9 +636,9 @@ echo $OUTPUT->header();
 $PAGE->requires->js_call_amd('local_mentor/mentorform', 'setup');
 echo $OUTPUT->footer();
 ?>
+
 <style>
-  /* Style the form */
-#regForm {
+  #regForm {
   background-color: #ffffff;
   margin: 100px auto;
   padding: 40px;
@@ -751,6 +646,26 @@ echo $OUTPUT->footer();
   min-width: 300px;
 }
 
+#register form {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+#register form .form-control{
+  font-family: inherit;
+}
+
+.form-button {
+    color: #151515;
+    text-transform: uppercase;
+    font-weight: 500;
+    background: #ffc451;
+    margin-top: 10px;
+}
 /* Style the input fields */
 input {
   padding: 10px;
@@ -769,31 +684,9 @@ input.invalid {
 .tab {
   display: none;
 }
-
-/* Make circles that indicate the steps of the form: */
-.step {
-  height: 15px;
-  width: 15px;
-  margin: 0 2px;
-  background-color: #bbbbbb;
-  border: none;
-  border-radius: 50%;
-  display: inline-block;
-  opacity: 0.5;
-}
-
-/* Mark the active step: */
-.step.active {
-  opacity: 1;
-}
-
-/* Mark the steps that are finished and valid: */
-.step.finish {
-  background-color: #04AA6D;
-}
 </style>
 <script>
-  var currentTab = 0; // Current tab is set to be the first tab (0)
+   var currentTab = 0; // Current tab is set to be the first tab (0)
 showTab(currentTab); // Display the current tab
 
 function showTab(n) {
@@ -836,24 +729,29 @@ function nextPrev(n) {
 
 function validateForm() {
   // This function deals with validation of the form fields
-  var x, y, i, valid = true; 
-//  alert(currentTab);
+  var x, y, i, valid = true; //alert(currentTab);
   x = document.getElementsByClassName("tab");
-  y = x[currentTab].getElementsByTagName("input");
+  //xid = document.getElementById("general");
+  console.log(document.getElementsByTagName("input"));
+  y = x[currentTab].getElementsByTagName("input");//alert(y.length);
   // A loop that checks every input field in the current tab:
-  for (i = 0; i < y.length; i++) {
-    // If a field is empty...
-    //alert(y[i].name);
-    if (y[i].value == "") {
-      // add an "invalid" class to the field:
-      y[i].className += " invalid";
-      // and set the current valid status to false:
-      valid = false;
-    }
-  }
+  // for (i = 0; i < y.length; i++) {
+  //   // If a field is empty...
+  //   //alert(y[i].name);
+  //   if (y[i].value == "") {
+  //     alert(y[i].name);
+  //     // add an "invalid" class to the field:
+  //     y[i].className += " invalid";
+  //     // and set the current valid status to false:
+  //     valid = false;
+  //   }
+  // }
   // If the valid status is true, mark the step as finished and valid:
   if (valid) {
+    //alert('valid');
     document.getElementsByClassName("step")[currentTab].className += " finish";
+  } else {
+    alert('invalid');
   }
   return valid; // return the valid status
 }
@@ -862,9 +760,9 @@ function fixStepIndicator(n) {
   // This function removes the "active" class of all steps...
   var i, x = document.getElementsByClassName("step");
   for (i = 0; i < x.length; i++) {
-    x[i].className = x[i].className.replace(" active", "");
+    x[i].className = x[i].className.replace(" filter-active", "");
   }
   //... and adds the "active" class to the current step:
-  x[n].className += " active";
+  x[n].className += " filter-active";
 }
 </script>
