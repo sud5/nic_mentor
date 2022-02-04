@@ -47,8 +47,6 @@ $PAGE->set_pagelayout('mentor_register');
 
 echo $OUTPUT->header();
 ?>
-
-<section id="register" class="portfolio">
 <!DOCTYPE html>
 <html lang="en">
 
@@ -194,16 +192,16 @@ echo $OUTPUT->header();
               
               <div class="row">
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="text" name="firstname" class="form-control" id="firstname" placeholder="First Name" required oninput="this.className = ''">
+                  <input type="text" name="firstname" class="form-control" id="firstname" placeholder="First Name" required >
                 </div>
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="text" name="lastname" class="form-control" id="lastname" placeholder="Last Name" required oninput="this.className = ''">
+                  <input type="text" name="lastname" class="form-control" id="lastname" placeholder="Last Name" required >
                 </div>
               </div> 
 
               <div class="row mt-3">
                 <div class="col-md-12 form-group">
-                  <select name="gender" class="form-control" oninput="this.className = ''">
+                  <select name="gender" class="form-control" >
                     <option disabled selected>Select your Gender</option>
                     <option>Male</option>
                     <option>Female</option>
@@ -214,34 +212,34 @@ echo $OUTPUT->header();
 
               <div class="row mt-3">
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required oninput="this.className = ''">
+                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required >
                 </div>
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="alternateemail" id="alternateemail" placeholder="Alternate Email" required oninput="this.className = ''">
+                  <input type="email" class="form-control" name="alternateemail" id="alternateemail" placeholder="Alternate Email" required >
                 </div>
               </div>
               
               <div class="row mt-3">
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="tel" class="form-control" name="phonenumber" id="phonenumber" placeholder="Phone Number" required oninput="this.className = ''">
+                  <input type="tel" class="form-control" name="phonenumber" id="phonenumber" placeholder="Phone Number" required >
                 </div>
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="text" onfocus="this.type='date'" class="form-control" name="dob" id="dob" placeholder="Date of Birth" required oninput="this.className = ''">
+                  <input type="text" onfocus="this.type='date'" class="form-control" name="dob" id="dob" placeholder="Date of Birth" required >
                 </div>
               </div>
 
               <div class="row mt-3">
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="text" class="form-control" name="idtype" id="email" placeholder="ID Type" required oninput="this.className = ''">
+                  <input type="text" class="form-control" name="idtype" id="email" placeholder="ID Type" required >
                 </div>
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="text" class="form-control" name="idnumber" id="email" placeholder="ID Number" required oninput="this.className = ''">
+                  <input type="text" class="form-control" name="idnumber" id="email" placeholder="ID Number" required >
                 </div>
               </div>
 
               <div class="row mt-3">
                 <div class="col-md-12 form-group">
-                  <input type='file' class="form-control" required oninput="this.className = ''">
+                  <input type='file' class="form-control" required >
                 </div>
               </div>
               
@@ -264,37 +262,37 @@ echo $OUTPUT->header();
 
               <div class="row mt-3">
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="state" id="state" placeholder="State" required oninput="this.className = ''">
+                  <input type="email" class="form-control" name="state" id="state" placeholder="State" required >
                 </div>
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="district" class="form-control" name="district" id="district" placeholder="District" required oninput="this.className = ''">
+                  <input type="district" class="form-control" name="district" id="district" placeholder="District" required >
                 </div>
               </div>
               
               <div class="row mt-3">
                 <div class="form-group">
-                  <textarea class="form-control" name="address1" rows="3" placeholder="Address 1" required oninput="this.className = ''"></textarea>
+                  <textarea class="form-control" name="address1" rows="3" placeholder="Address 1" required ></textarea>
                 </div> 
               </div>
               
               <div class="row mt-3">
                 <div class="form-group">
-                  <textarea class="form-control" name="address2" rows="3" placeholder="Address 2" required oninput="this.className = ''"></textarea>
+                  <textarea class="form-control" name="address2" rows="3" placeholder="Address 2" required ></textarea>
                 </div> 
               </div>
 
               <div class="row mt-3">
                 <div class="col-md-12 form-group mt-3 mt-md-0">
-                  <input type="text" class="form-control" name="pincode" id="pincode" placeholder="Pincode" required oninput="this.className = ''">
+                  <input type="text" class="form-control" name="pincode" id="pincode" placeholder="Pincode" required >
                 </div>
               </div>
 
               <div class="row mt-3">
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="text" class="form-control" name="linkedinurl" id="linkedinid" placeholder="LinkedIn profile URL" required oninput="this.className = ''">
+                  <input type="text" class="form-control" name="linkedinurl" id="linkedinid" placeholder="LinkedIn profile URL" required >
                 </div>
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="text" class="form-control" name="blogposturl" id="blogposturl" placeholder="Webpage/Blogpost URL" required oninput="this.className = ''">
+                  <input type="text" class="form-control" name="blogposturl" id="blogposturl" placeholder="Webpage/Blogpost URL" required >
                 </div>
               </div>
              
@@ -337,7 +335,11 @@ echo $OUTPUT->header();
                   <input type="text" class="form-control" name="registeringas" id="registeringas" placeholder="You are registering as" required>
                 </div>
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="text" class="form-control" name="aimpartneremployed" id="aimpartneremployed" placeholder="Are you employed by any of the AIM partners?" required>
+                  <select name="aimpartneremployed" class="form-control">
+                    <option value='' selected>Are you employed by any of the AIM partners?</option>
+                    <option value='1'>Yes</option>
+                    <option value='2'>No</option>
+                  </select>
                 </div>
               </div>
               
@@ -418,8 +420,8 @@ echo $OUTPUT->header();
                 <div class="col-md-12 form-group mt-3 mt-md-0">
                   <select name="referee1existingmentor" class="form-control">
                     <option value='' selected>Is the referee an existing Mentor of Change?</option>
-                    <option value='yes'>Yes</option>
-                    <option value='no'>No</option>
+                    <option value='1'>Yes</option>
+                    <option value='2'>No</option>
                   </select>
                 </div>
               </div>
@@ -446,8 +448,8 @@ echo $OUTPUT->header();
                 <div class="col-md-12 form-group mt-3 mt-md-0">
                   <select name="referee2existingmentor" class="form-control">
                     <option value='' selected>Is the referee 2 an existing Mentor of Change?</option>
-                    <option value='yes'>Yes</option>
-                    <option value='no'>No</option>
+                    <option value='1'>Yes</option>
+                    <option value='2'>No</option>
                   </select>
                 </div>
               </div>
@@ -766,3 +768,19 @@ function fixStepIndicator(n) {
   x[n].className += " filter-active";
 }
 </script>
+
+<style>
+  #hero {
+  width: 100%;
+  height: 100vh;
+  background: url("pix/hero-bg.jpg") top center;
+  background-size: cover;
+  position: relative;
+}
+
+.cta {
+  background: linear-gradient(rgba(2, 2, 2, 0.5), rgba(0, 0, 0, 0.5)), url("pix/testimonials-bg.jpg") fixed center center;
+  background-size: cover;
+  padding: 60px 0;
+}
+</style>
