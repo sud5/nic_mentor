@@ -736,6 +736,33 @@ function validateForm() {
   //xid = document.getElementById("general");
   console.log(document.getElementsByTagName("input"));
   y = x[currentTab].getElementsByTagName("input");//alert(y.length);
+
+  var firstname = document.getElementById("firstname").value;
+  var lastname = document.getElementById("lastname").value;
+  var email = document.getElementById("email").value;
+  var phonenumber = document.getElementById("phonenumber").value;
+  var dob = document.getElementById("dob").value;
+  var gender = document.getElementById("dob").value;
+
+  if(firstname == '') {
+    valid=false;
+    alert('Firstanme is required');
+  } else if(lastname=='') {
+    valid=false;
+    alert('Lastname is required');
+  } else if(gender=='') {
+    valid=false;
+    alert('Gender is required');
+  } else if(email==''){
+    valid=false;
+    alert('Email is required');
+  } else if(phonenumber =='') {
+    valid=false;
+    alert('phonenumber is required');
+  } else if(dob==''){
+    valid=false;
+    alert('DOB is required');
+  }
   // A loop that checks every input field in the current tab:
   // for (i = 0; i < y.length; i++) {
   //   // If a field is empty...
@@ -753,7 +780,7 @@ function validateForm() {
     //alert('valid');
     document.getElementsByClassName("step")[currentTab].className += " finish";
   } else {
-    alert('invalid');
+    //alert('invalid');
   }
   return valid; // return the valid status
 }
@@ -782,5 +809,15 @@ function fixStepIndicator(n) {
   background: linear-gradient(rgba(2, 2, 2, 0.5), rgba(0, 0, 0, 0.5)), url("pix/testimonials-bg.jpg") fixed center center;
   background-size: cover;
   padding: 60px 0;
+}
+
+#user-notifications .alert-block.fade.in {
+    /* background: red; */
+    position: absolute;
+    z-index: 999999;
+    margin-top: 304px;
+    margin: 0 auto;
+    text-align: center;
+    width: 100%;
 }
 </style>
