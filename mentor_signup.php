@@ -262,10 +262,28 @@ echo $OUTPUT->header();
 
               <div class="row mt-3">
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="state" id="state" placeholder="State" required >
+                <?php
+                  global $DB;
+                  $select = array('0' => "Select state");
+                  $states = $DB->get_records_menu('state', array());
+                
+                  $states = array_merge($select, $states);
+                ?>
+                  <select name="state" id="id_state" class="form-control">
+                    <?php
+                      foreach($states as $statekey=>$statevalue) {
+                        ?>
+                          <option value="<?php echo $statekey;?>"><?php echo $statevalue;?></option>
+                        <?php
+                      }
+                    ?>
+                    
+                  </select>
                 </div>
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="district" class="form-control" name="district" id="district" placeholder="District" required >
+                  <select name="district" id="id_city" class="form-control">
+                    <option value="" selected>Select your City</option>
+                  </select>
                 </div>
               </div>
               
