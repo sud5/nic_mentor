@@ -830,12 +830,11 @@ function fixStepIndicator(n) {
 }
 
 #user-notifications .alert-block.fade.in {
-    /* background: red; */
     position: absolute;
     z-index: 999999;
-    margin-top: 304px;
     margin: 0 auto;
     text-align: center;
     width: 100%;
+    opacity: 1 !important;
 }
 </style>
